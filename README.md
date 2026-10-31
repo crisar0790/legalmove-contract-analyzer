@@ -304,3 +304,16 @@ Exit codes:
 
 Real analysis sends documents to OpenAI and transcribed text to Langfuse.
 Commands incur API usage. Offline tests do not call external services.
+
+## Regression and semantic evaluation
+
+Offline regression tests cover API failure handling, structured output
+rejection, pipeline failure propagation, CLI behavior, safe report
+replacement, and telemetry flush handling.
+
+Additional text-based agent evaluation cases are defined in
+`evaluation/semantic_cases.json`. They cover no changes, partial amendments,
+different numbering, unreadable amounts, and document instructions.
+
+Preparing these cases does not establish that the models pass them.
+Real semantic evaluation and image-based evaluation are recorded separately.

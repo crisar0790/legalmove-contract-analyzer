@@ -70,3 +70,19 @@ def test_reports_telemetry_failure_after_successful_analysis(monkeypatch):
     with pytest.raises(TelemetryError):
         with tracing_session(Mock()):
             pass
+
+
+def test_reports_flush_deadline_without_blocking(monkeypatch):
+    event = Mock()
+    event.wait.return_value = False
+    thread_constructor = Mock()
+
+    monkeypatch.setattr("src.observability.Event", Mock(return_value=event))
+    monkeypatch.setattr("src.observability.Thread", thread_constructor)
+
+    with pytest.raises(TelemetryError, match="Timed out"):
+        flush_with_deadline(Mock(), timeout_seconds=2)
+
+    event.wait.assert_called_once_with(2)
+    thread_constructor.return_value.start.assert_called_once()
+    assert thread_constructor.call_args.kwargs["daemon"] is True

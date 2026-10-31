@@ -140,3 +140,43 @@ def test_missing_arguments_returns_usage_error(cli_dependencies):
 
     assert caught.value.code == 2
     cli_dependencies.assert_not_called()
+
+
+def test_failed_replacement_preserves_previous_report(
+    tmp_path, cli_dependencies, monkeypatch, capsys
+):
+    output = tmp_path / "report.json"
+    output.write_text("Previous report", encoding="utf-8")
+    monkeypatch.setattr(
+        "src.main.os.replace",
+        Mock(side_effect=PermissionError("Denied")),
+    )
+
+    exit_code = main(["original.png", "amendment.png", "--output", str(output)])
+
+    assert exit_code == 1
+    assert capsys.readouterr().out == ""
+    assert output.read_text(encoding="utf-8") == "Previous report"
+    assert list(tmp_path.glob(".legalmove-*.tmp")) == []
+
+
+def test_rejects_output_directory_before_analysis(tmp_path, cli_dependencies, capsys):
+    exit_code = main(["original.png", "amendment.png", "--output", str(tmp_path)])
+
+    assert exit_code == 1
+    cli_dependencies.assert_not_called()
+    assert "must not be a directory" in capsys.readouterr().err
+
+
+def test_rejects_output_symlink_to_input(tmp_path, cli_dependencies, capsys):
+    original = tmp_path / "original.png"
+    original.write_bytes(b"Original image bytes")
+    output = tmp_path / "report.json"
+    output.symlink_to(original)
+
+    exit_code = main([str(original), "amendment.png", "--output", str(output)])
+
+    assert exit_code == 1
+    cli_dependencies.assert_not_called()
+    assert "must differ" in capsys.readouterr().err
+    assert original.read_bytes() == b"Original image bytes"

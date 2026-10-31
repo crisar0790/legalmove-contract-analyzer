@@ -5,6 +5,7 @@ from unittest.mock import Mock
 import pytest
 from langchain_core.messages import AIMessage
 from langchain_core.runnables import RunnableLambda
+from openai import APIConnectionError
 
 from src.agents.extraction_agent import ExtractionAgent
 from src.exceptions import ModelResponseError
@@ -134,5 +135,71 @@ def test_translates_direct_validation_error_without_retrying():
 
     with pytest.raises(ModelResponseError, match="validation"):
         agent.run("Original", "Adenda", "Mapa")
+
+    assert len(calls) == 1
+
+
+def test_retries_transient_agent_failure_and_preserves_inputs(report, monkeypatch):
+    received = []
+    failure = APIConnectionError(request=Mock())
+
+    def respond(prompt):
+        received.append(prompt.to_messages())
+        if len(received) == 1:
+            raise failure
+        return {
+            "raw": AIMessage(
+                content=report.model_dump_json(),
+                response_metadata={"status": "completed"},
+            ),
+            "parsed": report,
+            "parsing_error": None,
+        }
+
+    model = Mock()
+    model.with_structured_output.return_value = RunnableLambda(respond)
+
+    def call_without_wait(operation, *, max_retries):
+        from src.llm_client import call_with_retries
+
+        return call_with_retries(
+            operation,
+            max_retries=max_retries,
+            wait=lambda _: None,
+        )
+
+    monkeypatch.setattr(
+        "src.agents.extraction_agent.call_with_retries",
+        call_without_wait,
+    )
+    agent = ExtractionAgent(model, max_retries=1)
+
+    result = agent.run("Original text", "Amendment text", "Context map")
+
+    assert result is report
+    assert len(received) == 2
+    assert received[0] == received[1]
+
+
+def test_response_rejection_does_not_trigger_another_model_call(report):
+    calls = []
+
+    def respond(_):
+        calls.append(True)
+        return {
+            "raw": AIMessage(
+                content=report.model_dump_json(),
+                response_metadata={"status": "incomplete"},
+            ),
+            "parsed": report,
+            "parsing_error": None,
+        }
+
+    model = Mock()
+    model.with_structured_output.return_value = RunnableLambda(respond)
+    agent = ExtractionAgent(model, max_retries=2)
+
+    with pytest.raises(ModelResponseError):
+        agent.run("Original", "Amendment", "Context map")
 
     assert len(calls) == 1
