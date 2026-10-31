@@ -151,6 +151,9 @@ def test_builds_clients_with_sdk_retries_disabled(monkeypatch):
         timeout=30,
         max_retries=0,
         max_tokens=1024,
+        use_responses_api=True,
+        output_version="responses/v1",
+        reasoning={"effort": "low"},
     )
 
 

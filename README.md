@@ -161,3 +161,23 @@ Transcription requires an OpenAI API call. Offline tests use simulated
 responses and do not demonstrate transcription accuracy.
 
 Langfuse instrumentation will be added in a later implementation step.
+
+## Contextualization agent
+
+`ContextualizationAgent` maps original and amendment sections through an
+explicit LangChain prompt-model-validation-parser chain.
+
+The model is injected into the constructor. The agent receives both document
+texts, distinguishes their numbering, and identifies correspondences,
+unmatched sections, and ambiguities.
+
+It produces a contextual map in Spanish, not the final change report.
+Document content is treated as untrusted data; prompt instructions alone
+do not guarantee protection against prompt injection.
+
+The agent client uses Responses API with an initial low reasoning effort.
+Its output budget includes reasoning and visible output tokens.
+Incomplete, refused, empty, or unconfirmed completion states are rejected.
+
+Offline tests verify wiring and error handling. Semantic alignment must
+also be checked using real model responses against the reference documents.

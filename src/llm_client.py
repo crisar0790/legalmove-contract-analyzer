@@ -32,8 +32,9 @@ def build_agent_client(
     settings: Settings,
     *,
     max_output_tokens: int,
+    reasoning_effort: str = "low",
 ) -> ChatOpenAI:
-    """Create a LangChain model with a stage-specific output budget."""
+    """Create a Responses API model with a stage-specific output budget."""
     if max_output_tokens <= 0:
         raise ValueError("max_output_tokens must be positive.")
 
@@ -43,6 +44,9 @@ def build_agent_client(
         timeout=settings.request_timeout_seconds,
         max_retries=0,
         max_tokens=max_output_tokens,
+        use_responses_api=True,
+        output_version="responses/v1",
+        reasoning={"effort": reasoning_effort},
     )
 
 
