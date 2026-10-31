@@ -263,3 +263,44 @@ flush or prove delivery; inspect the dashboard to confirm receipt.
 
 If analysis and telemetry flushing both fail, the original analysis error
 is preserved and the telemetry failure is logged separately.
+
+## Command-line usage
+
+Run commands from the repository root with the virtual environment active.
+
+Show help:
+
+```bash
+python -m src.main --help
+```
+
+Analyze the simple case and save its validated report:
+
+```bash
+mkdir -p outputs
+python -m src.main data/test_contracts/simple_original.png data/test_contracts/simple_amendment.png --output outputs/simple.json
+```
+
+Analyze the complex case:
+
+```bash
+python -m src.main data/test_contracts/complex_original.png data/test_contracts/complex_amendment.png --output outputs/complex.json
+```
+
+Use quotes around paths containing spaces. Add `--verbose` to display
+model identifiers and additional failure diagnostics.
+
+Successful analysis writes only the three-field JSON report to stdout.
+Trace identifiers, diagnostics, and errors go to stderr.
+
+The optional output directory must already exist. The output path must
+differ from both input images. Existing reports are replaced only after
+analysis succeeds and the complete new report is written.
+
+Exit codes:
+- `0`: analysis and requested output writing succeeded.
+- `1`: configuration, analysis, telemetry, or output failure.
+- `2`: invalid command-line arguments.
+
+Real analysis sends documents to OpenAI and transcribed text to Langfuse.
+Commands incur API usage. Offline tests do not call external services.
