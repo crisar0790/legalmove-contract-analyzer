@@ -297,15 +297,23 @@ automatically approve semantic criteria; manual review remains separate.
 | Two image pairs | GPT-4o + GPT-6.1 Sol | Correct sections, nine expected facts, faithful transcriptions |
 | Same reviewed text pairs | GPT-6 Luna, refined context prompt | Correct sections, complete findings, corrected ratification alignment |
 | Five additional text cases | GPT-6 Luna, refined context prompt | All 13 prepared criteria passed manual review |
+| Final clean-checkout image verification | GPT-4o + GPT-6 Luna | Both reports reviewed; expected sections and details confirmed; models and traces verified |
 
 The semantic cases cover no changes, a partial amendment, different numbering,
 an unreadable amount, and embedded document instructions. The unreadable-text
 case does not test whether vision detects a blurred image correctly.
 
-The initial image evidence used Sol. Luna candidate evaluation used text;
-complete image-based delivery verification with the final configuration
-remains a separate final check. Trace review flags record only traces actually
-inspected. Agent usage is available in Langfuse but not collected in the local
+Final end-to-end verification was completed from a clean checkout on
+October 31, 2026, using GPT-4o for vision and GPT-6 Luna for both agents.
+Both image pairs produced manually reviewed reports with the expected
+sections and change details. Both Langfuse traces were inspected, including
+the four expected model generations and their configured models.
+
+The clean checkout passed dependency compatibility checks, Ruff linting,
+format checks, and all 182 offline tests.
+
+Trace review flags record only traces actually inspected.
+Agent usage is available in Langfuse but not collected in the local
 evaluation report. No general accuracy percentage or speedup is claimed.
 
 See [evaluation notes](docs/evaluation.md),
@@ -345,5 +353,3 @@ See [evaluation notes](docs/evaluation.md),
 - Model aliases, service behavior, availability, and prices can change.
 - Telemetry submission is asynchronous; a local trace ID alone is not proof
   of a complete remotely stored trace.
-- Final clean-checkout verification and defense preparation are separate
-  delivery tasks, not completed merely by passing unit tests.
