@@ -84,3 +84,30 @@ Run offline tests with:
 
 ```bash
 python -m pytest
+
+## Output validation
+
+`ContractChangeOutput` defines exactly three required fields:
+
+| Field | Type | Meaning |
+| --- | --- | --- |
+| `sections_changed` | `list[str]` | Modified, added, or explicitly deleted section identifiers |
+| `topics_touched` | `list[str]` | Topics affected by the changes |
+| `summary_of_the_change` | `str` | Summary supported by the source documents |
+
+Validation rejects additional fields, incorrect types, blank list items,
+and blank summaries. Empty lists are allowed for reports without changes.
+Valid text is preserved without automatic trimming or deduplication.
+
+Illustrative output, not a measured model result:
+
+```json
+{
+  "sections_changed": ["Cláusula 3"],
+  "topics_touched": ["Condiciones de pago"],
+  "summary_of_the_change": "La cláusula 3 modifica el importe mensual de USD 500 a USD 650 y el vencimiento del día 5 al día 10."
+}
+```
+
+Schema validation checks the report structure. Factual accuracy and
+completeness must be evaluated against the source documents separately.
