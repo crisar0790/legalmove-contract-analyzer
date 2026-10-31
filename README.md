@@ -181,3 +181,20 @@ Incomplete, refused, empty, or unconfirmed completion states are rejected.
 
 Offline tests verify wiring and error handling. Semantic alignment must
 also be checked using real model responses against the reference documents.
+
+## Extraction agent
+
+`ExtractionAgent` receives the original text, amendment text, and contextual
+map. The map guides alignment but does not replace the source documents.
+
+Its specialized prompt covers modifications, additions, explicit deletions,
+unmatched sections, and uncertainty. Omission from a partial amendment is
+not treated as deletion.
+
+The agent requests structured output using `ContractChangeOutput`.
+It checks the raw response completion state and rejects parsing failures
+or missing validated reports. No automatic repair is performed.
+
+The returned report contains exactly the three public fields. Structural
+validation does not establish factual accuracy; findings must be checked
+against the reference documents.

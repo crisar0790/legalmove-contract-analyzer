@@ -2,34 +2,13 @@
 
 from pathlib import Path
 
-from langchain_core.messages import AIMessage
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import Runnable, RunnableConfig, RunnableLambda
 
-from src.exceptions import ModelResponseError
-from src.llm_client import call_with_retries
+from src.llm_client import call_with_retries, validate_agent_message
 
 PROMPT_PATH = Path(__file__).resolve().parents[2] / "prompts" / "contextualization.md"
-
-
-def validate_agent_message(message: AIMessage) -> AIMessage:
-    """Reject incomplete, refused, or empty Responses API messages."""
-    if message.response_metadata.get("status") != "completed":
-        raise ModelResponseError("The agent response did not complete.")
-
-    if message.additional_kwargs.get("refusal") is not None:
-        raise ModelResponseError("The agent refused the request.")
-
-    if isinstance(message.content, list):
-        for block in message.content:
-            if isinstance(block, dict) and block.get("type") == "refusal":
-                raise ModelResponseError("The agent refused the request.")
-
-    if not message.text.strip():
-        raise ModelResponseError("The agent returned no usable text.")
-
-    return message
 
 
 class ContextualizationAgent:

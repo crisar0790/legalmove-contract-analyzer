@@ -4,6 +4,7 @@ from collections.abc import Callable
 from time import sleep
 from typing import TypeVar
 
+from langchain_core.messages import AIMessage
 from langchain_openai import ChatOpenAI
 from openai import (
     APIConnectionError,
@@ -111,3 +112,22 @@ def validate_completion_text(
     if not isinstance(text, str) or not text.strip():
         raise ModelResponseError("The model returned no usable text.")
     return text
+
+
+def validate_agent_message(message: AIMessage) -> AIMessage:
+    """Reject incomplete, refused, or empty Responses API messages."""
+    if message.response_metadata.get("status") != "completed":
+        raise ModelResponseError("The agent response did not complete.")
+
+    if message.additional_kwargs.get("refusal") is not None:
+        raise ModelResponseError("The agent refused the request.")
+
+    if isinstance(message.content, list):
+        for block in message.content:
+            if isinstance(block, dict) and block.get("type") == "refusal":
+                raise ModelResponseError("The agent refused the request.")
+
+    if not message.text.strip():
+        raise ModelResponseError("The agent returned no usable text.")
+
+    return message
