@@ -60,3 +60,27 @@ Create and activate a virtual environment:
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
+
+## Configuration
+
+Copy `.env.example` to `.env` and configure the OpenAI and Langfuse
+credentials. Set `LANGFUSE_HOST` to the base URL for your Langfuse project.
+
+Configuration is loaded explicitly with `load_settings()`. Process environment
+variables take precedence over `.env`. Loading configuration does not create
+clients or make network requests.
+
+Vision and agent models are configured separately, with `gpt-4o` as the
+initial baseline.
+
+Timeouts apply per HTTP attempt. `MAX_RETRIES=N` allows at most `N+1`
+attempts per logical model call; zero retries is valid. Client integration
+will enforce this budget in a later implementation step.
+
+Output token budgets and the image size limit are initial application
+settings and will be reviewed during evaluation.
+
+Run offline tests with:
+
+```bash
+python -m pytest
