@@ -2,14 +2,43 @@
 
 from pathlib import Path
 
+from langchain_core.messages import AIMessage
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnableConfig
+from pydantic import ValidationError
 
 from src.exceptions import ModelResponseError
 from src.llm_client import call_with_retries, validate_agent_message
 from src.models import ContractChangeOutput
 
 PROMPT_PATH = Path(__file__).resolve().parents[2] / "prompts" / "extraction.md"
+
+
+def validate_extraction_response(response: object) -> ContractChangeOutput:
+    """Accept only a completed response containing a validated report."""
+    if not isinstance(response, dict):
+        raise ModelResponseError("Invalid structured response envelope.")
+
+    required_keys = {"raw", "parsed", "parsing_error"}
+    if not required_keys.issubset(response):
+        raise ModelResponseError("Incomplete structured response envelope.")
+
+    raw = response["raw"]
+    if not isinstance(raw, AIMessage):
+        raise ModelResponseError("The raw model response is missing or invalid.")
+
+    validate_agent_message(raw)
+
+    if response["parsing_error"] is not None:
+        raise ModelResponseError(
+            "The extracted report failed structured output validation."
+        ) from None
+
+    parsed = response["parsed"]
+    if not isinstance(parsed, ContractChangeOutput):
+        raise ModelResponseError("The model returned no validated report.")
+
+    return parsed
 
 
 class ExtractionAgent:
@@ -59,19 +88,14 @@ class ExtractionAgent:
         if any(not value.strip() for value in inputs.values()):
             raise ValueError("Both document texts and contextual map are required.")
 
-        response = call_with_retries(
-            lambda: self._chain.invoke(inputs, config=config),
-            max_retries=self._max_retries,
-        )
-        validate_agent_message(response["raw"])
-
-        if response["parsing_error"] is not None:
+        try:
+            response = call_with_retries(
+                lambda: self._chain.invoke(inputs, config=config),
+                max_retries=self._max_retries,
+            )
+        except ValidationError:
             raise ModelResponseError(
                 "The extracted report failed structured output validation."
             ) from None
 
-        parsed = response["parsed"]
-        if not isinstance(parsed, ContractChangeOutput):
-            raise ModelResponseError("The model returned no validated report.")
-
-        return parsed
+        return validate_extraction_response(response)

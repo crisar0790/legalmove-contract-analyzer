@@ -119,3 +119,20 @@ def test_rejects_blank_inputs_without_calling_model(inputs):
         agent.run(*inputs)
 
     assert received == []
+
+
+def test_translates_direct_validation_error_without_retrying():
+    calls = []
+
+    def respond(_):
+        calls.append(True)
+        return ContractChangeOutput.model_validate({})
+
+    model = Mock()
+    model.with_structured_output.return_value = RunnableLambda(respond)
+    agent = ExtractionAgent(model, max_retries=2)
+
+    with pytest.raises(ModelResponseError, match="validation"):
+        agent.run("Original", "Adenda", "Mapa")
+
+    assert len(calls) == 1

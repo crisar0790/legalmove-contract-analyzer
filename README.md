@@ -198,3 +198,19 @@ or missing validated reports. No automatic repair is performed.
 The returned report contains exactly the three public fields. Structural
 validation does not establish factual accuracy; findings must be checked
 against the reference documents.
+
+## Output failure policy
+
+Extraction succeeds only when the raw model response is completed,
+contains usable text, and the structured integration returns a validated
+`ContractChangeOutput` without parsing errors.
+
+Malformed JSON, missing fields, additional fields, incorrect types,
+blank values, refusals, and incomplete responses are rejected.
+
+Validation failures do not trigger API retries or automatic repair.
+No missing fields are filled with invented content.
+
+Pydantic validation occurs inside the structured model integration.
+The acceptance boundary checks that result and the raw response status;
+it does not represent a second independent semantic validation.
