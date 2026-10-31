@@ -1,0 +1,251 @@
+{
+  "started_at_utc": "2026-10-31T20:51:59.384966+00:00",
+  "configuration": {
+    "vision_model": "gpt-4o",
+    "agent_model": "gpt-6.1-sol",
+    "reasoning_effort": "low",
+    "request_timeout_seconds": 60.0,
+    "max_retries": 2,
+    "vision_max_output_tokens": 4096,
+    "context_max_output_tokens": 2048,
+    "extraction_max_output_tokens": 2048
+  },
+  "prompt_sha256": {
+    "vision": "74f9435e178084cf2e431aab26cb299c5c4c66dff4cff8f84dc687d010ce1b4d",
+    "contextualization": "eb5aeaba4009dabdec69c86bf87df66a547e502f52da5bd5237c1a6e0ef3340d",
+    "extraction": "b8e128492dfdec03483fa90b5ab891dc9c88f7faca250dec514dd122ac76033e"
+  },
+  "semantic_review_status": "passed",
+  "cases": [
+    {
+      "case": "simple",
+      "execution_status": "success",
+      "json_valid": true,
+      "trace_id": "d535d2172ff80752c0b13709b9f83f7b",
+      "latency_including_flush_seconds": 13.086076957995829,
+      "expected_sections": [
+        "Cláusula 3"
+      ],
+      "detected_sections": [
+        "Cláusula 3"
+      ],
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 3"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "vision_usage": {
+        "original": {
+          "completion_tokens": 190,
+          "prompt_tokens": 1303,
+          "total_tokens": 1493,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0,
+            "text_tokens": null
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": null,
+            "cached_tokens": 0,
+            "image_tokens": null,
+            "text_tokens": null
+          }
+        },
+        "amendment": {
+          "completion_tokens": 132,
+          "prompt_tokens": 1303,
+          "total_tokens": 1435,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0,
+            "text_tokens": null
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": null,
+            "cached_tokens": 1152,
+            "image_tokens": null,
+            "text_tokens": null
+          }
+        }
+      },
+      "agent_usage": null,
+      "agent_usage_note": "Available in Langfuse generations; not collected locally yet.",
+      "input_sha256": {
+        "original": "b5ad6fc3865d388ad2f336d23393d5b4aa90955e0c882efeb99359b70bb4bc9b",
+        "amendment": "e970473157f017f64117e3ee8f826d22c0e1b79b2d3113829ba524463438b921"
+      },
+      "manual_review": {
+        "transcription_fidelity": true,
+        "context_alignment": true,
+        "expected_facts": [
+          {
+            "fact": "El importe mensual cambia de USD 500 a USD 650.",
+            "passed": true
+          },
+          {
+            "fact": "El vencimiento cambia del día 5 al día 10 de cada mes.",
+            "passed": true
+          },
+          {
+            "fact": "Los cambios se aplican desde el 1 de julio de 2026.",
+            "passed": true
+          }
+        ],
+        "unchanged_facts": [
+          {
+            "fact": "El objeto continúa siendo el mantenimiento del sitio web.",
+            "passed": true
+          },
+          {
+            "fact": "La vigencia termina el 31 de diciembre de 2026.",
+            "passed": true
+          },
+          {
+            "fact": "Se mantienen la confidencialidad y el preaviso de 30 días.",
+            "passed": true
+          }
+        ],
+        "change_types_correct": true,
+        "no_unsupported_claims": true,
+        "trace_verified": null,
+        "notes": "Images, source references, transcriptions, contextual maps, and final reports reviewed. No substantive transcription differences, missing expected changes, or unsupported claims identified. Unchanged facts were checked for false change attribution; their explicit repetition in the summary is not required."
+      }
+    },
+    {
+      "case": "complex",
+      "execution_status": "success",
+      "json_valid": true,
+      "trace_id": "6c259f6c5400d0de10c2ebe7568ce0b8",
+      "latency_including_flush_seconds": 17.625049457994464,
+      "expected_sections": [
+        "Cláusula 2",
+        "Cláusula 4",
+        "Cláusula 7"
+      ],
+      "detected_sections": [
+        "Cláusula 2",
+        "Cláusula 4",
+        "Cláusula 7"
+      ],
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 2",
+          "cláusula 4",
+          "cláusula 7"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "vision_usage": {
+        "original": {
+          "completion_tokens": 210,
+          "prompt_tokens": 1303,
+          "total_tokens": 1513,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0,
+            "text_tokens": null
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": null,
+            "cached_tokens": 1152,
+            "image_tokens": null,
+            "text_tokens": null
+          }
+        },
+        "amendment": {
+          "completion_tokens": 264,
+          "prompt_tokens": 1303,
+          "total_tokens": 1567,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0,
+            "text_tokens": null
+          },
+          "prompt_tokens_details": {
+            "audio_tokens": 0,
+            "cache_write_tokens": null,
+            "cached_tokens": 1152,
+            "image_tokens": null,
+            "text_tokens": null
+          }
+        }
+      },
+      "agent_usage": null,
+      "agent_usage_note": "Available in Langfuse generations; not collected locally yet.",
+      "input_sha256": {
+        "original": "d0b4870023c467e8f0c10e2fadde9e7f4b1a3c643d3b90e4c25accccf4aaf21f",
+        "amendment": "f49ce3f2e0507371e89bee3d0d097ed041d01be633606aeb6bd70b8ae6fc1273"
+      },
+      "manual_review": {
+        "transcription_fidelity": true,
+        "context_alignment": true,
+        "expected_facts": [
+          {
+            "fact": "La cláusula 2 amplía el territorio de Argentina a Argentina, Chile y Uruguay.",
+            "passed": true
+          },
+          {
+            "fact": "La cláusula 4 se elimina expresamente: queda sin efecto la prohibición de capacitaciones internas.",
+            "passed": true
+          },
+          {
+            "fact": "Se agrega la cláusula 7 de soporte técnico remoto.",
+            "passed": true
+          },
+          {
+            "fact": "El soporte se brinda de lunes a viernes de 09:00 a 18:00, hora de Argentina.",
+            "passed": true
+          },
+          {
+            "fact": "La primera respuesta tiene un plazo máximo de 24 horas hábiles.",
+            "passed": true
+          },
+          {
+            "fact": "Los cambios entran en vigor el 1 de julio de 2026.",
+            "passed": true
+          }
+        ],
+        "unchanged_facts": [
+          {
+            "fact": "El precio se mantiene en USD 1200 anuales.",
+            "passed": true
+          },
+          {
+            "fact": "El vencimiento del pago sigue siendo el 15 de enero.",
+            "passed": true
+          },
+          {
+            "fact": "La vigencia termina el 31 de diciembre de 2026.",
+            "passed": true
+          },
+          {
+            "fact": "La confidencialidad permanece vigente.",
+            "passed": true
+          }
+        ],
+        "change_types_correct": true,
+        "no_unsupported_claims": true,
+        "trace_verified": null,
+        "notes": "Images, source references, transcriptions, contextual maps, and final reports reviewed. No substantive transcription differences, missing expected changes, or unsupported claims identified. Unchanged facts were checked for false change attribution; their explicit repetition in the summary is not required."
+      }
+    }
+  ]
+}

@@ -29,10 +29,13 @@ from src.observability import (
 
 @dataclass(frozen=True)
 class PipelineResult:
-    """Internal result; only analysis belongs to the public JSON output."""
+    """Internal analysis result with evaluation and tracing evidence."""
 
     analysis: ContractChangeOutput
     trace_id: str | None = None
+    original_document: ParsedDocument | None = None
+    amendment_document: ParsedDocument | None = None
+    contextual_map: str | None = None
 
 
 class ContractAnalysisPipeline:
@@ -109,7 +112,12 @@ class ContractAnalysisPipeline:
             )
             update_output(span, analysis.model_dump())
 
-        return PipelineResult(analysis=analysis)
+        return PipelineResult(
+            analysis=analysis,
+            original_document=original,
+            amendment_document=amendment,
+            contextual_map=contextual_map,
+        )
 
 
 def analyze_contracts(

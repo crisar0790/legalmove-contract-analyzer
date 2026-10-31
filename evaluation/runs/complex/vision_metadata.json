@@ -1,0 +1,54 @@
+{
+  "original": {
+    "text": "CONTRATO DE LICENCIA DE SOFTWARE  \nCaso complejo - Documento original\n\nEntre AR Software y Empresa Demo se acuerda:\n\nCláusula 1. Objeto  \nAR Software concede una licencia de uso de su plataforma de gestión comercial a Empresa Demo.\n\nCláusula 2. Alcance territorial  \nLa licencia permite utilizar la plataforma únicamente dentro del territorio de la República Argentina.\n\nCláusula 3. Precio  \nEl precio de la licencia es de USD 1200 anuales, con vencimiento el 15 de enero de cada año.\n\nCláusula 4. Restricción de uso  \nSe prohíbe utilizar la plataforma para impartir capacitaciones internas al personal de Empresa Demo.\n\nCláusula 5. Confidencialidad  \nLas partes mantendrán confidenciales las credenciales y la información comercial intercambiada.\n\nCláusula 6. Vigencia  \nLa licencia estará vigente desde el 1 de enero de 2026 hasta el 31 de diciembre de 2026.",
+    "model": "gpt-4o-2024-08-06",
+    "response_id": "chatcmpl-EfALdtziiXe5wdccizrRROZ1i7DOR",
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 210,
+      "prompt_tokens": 1303,
+      "total_tokens": 1513,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": 0,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": null,
+        "cached_tokens": 1152,
+        "image_tokens": null,
+        "text_tokens": null
+      }
+    },
+    "latency_seconds": 2.6069303749973187
+  },
+  "amendment": {
+    "text": "ADENDA AL CONTRATO DE LICENCIA DE SOFTWARE  \nCaso complejo - Adenda\n\nAR Software y Empresa Demo acuerdan que las siguientes disposiciones entran en vigor el 1 de julio de 2026:\n\n**Cláusula 1. Ampliación territorial**  \nSe sustituye la cláusula 2 del contrato original por:\n\n\"**Cláusula 2. Alcance territorial**  \nLa licencia permite utilizar la plataforma en los territorios de Argentina, Chile y Uruguay.\"\n\n**Cláusula 2. Eliminación de restricción**  \nSe elimina expresamente la cláusula 4 del contrato original.  \nQueda sin efecto la prohibición de utilizar la plataforma para capacitaciones internas al personal de Empresa Demo.\n\n**Cláusula 3. Incorporación de soporte**  \nSe incorpora al contrato original la siguiente cláusula:\n\n\"**Cláusula 7. Soporte técnico**  \nAR Software brindará soporte remoto de lunes a viernes, de 09:00 a 18:00, hora de Argentina.  \nEl plazo máximo de primera respuesta será de 24 horas hábiles.\"\n\n**Cláusula 4. Ratificación**  \nLas demás cláusulas del contrato original permanecen vigentes sin modificaciones, incluidos precio y vigencia.",
+    "model": "gpt-4o-2024-08-06",
+    "response_id": "chatcmpl-EfALfmEHzkJstAzi10vMmSNXbSaDH",
+    "finish_reason": "stop",
+    "usage": {
+      "completion_tokens": 264,
+      "prompt_tokens": 1303,
+      "total_tokens": 1567,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": 0,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": null,
+        "cached_tokens": 1152,
+        "image_tokens": null,
+        "text_tokens": null
+      }
+    },
+    "latency_seconds": 2.421169999994163
+  }
+}
