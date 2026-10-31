@@ -60,6 +60,7 @@ Create and activate a virtual environment:
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
+```
 
 ## Configuration
 
@@ -111,3 +112,17 @@ Illustrative output, not a measured model result:
 
 Schema validation checks the report structure. Factual accuracy and
 completeness must be evaluated against the source documents separately.
+
+## Image input validation
+
+Input images are validated locally before model requests.
+
+Validation checks file availability, readability, byte size, actual JPEG/PNG
+content, and successful decoding. Empty, corrupted, unsupported, and oversized
+files are rejected.
+
+MIME types are detected from image content rather than filename extensions.
+Valid images are encoded as base64 data URIs without modifying their bytes.
+
+The byte limit is configured through `MAX_IMAGE_SIZE_BYTES`.
+Image validation and encoding require no API credentials or network access.
