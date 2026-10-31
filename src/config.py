@@ -65,9 +65,13 @@ def _timeout(values: dict) -> float:
     return value
 
 
-def _model(values: dict, name: str) -> str:
-    """Read a model name with the project baseline as default."""
-    return _required({name: values.get(name, "gpt-4o")}, name)
+def _model(
+    values: dict,
+    name: str,
+    default: str = "gpt-4o",
+) -> str:
+    """Read a nonblank model name with an explicit default."""
+    return _required({name: values.get(name, default)}, name)
 
 
 def load_settings(env_file: Path | None = None) -> Settings:
@@ -81,7 +85,7 @@ def load_settings(env_file: Path | None = None) -> Settings:
         langfuse_secret_key=_required(values, "LANGFUSE_SECRET_KEY"),
         langfuse_host=_required(values, "LANGFUSE_HOST"),
         vision_model=_model(values, "VISION_MODEL"),
-        agent_model=_model(values, "AGENT_MODEL"),
+        agent_model=_model(values, "AGENT_MODEL", "gpt-6-luna"),
         request_timeout_seconds=_timeout(values),
         max_retries=_integer(values, "MAX_RETRIES", 2, 0),
         vision_max_output_tokens=_integer(values, "VISION_MAX_OUTPUT_TOKENS", 4096, 1),

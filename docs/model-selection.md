@@ -1,32 +1,81 @@
-# Initial model selection
+# Model selection
 
 ## Selected configuration
 
 - Vision: `gpt-4o`, preserving the requirement recorded in the project plan.
-- Contextualization and extraction: `gpt-6.1-sol`.
-- Lower-cost evaluation candidate: `gpt-6-luna`.
+- Contextualization and extraction: `gpt-6-luna`.
+- Initial evaluation baseline: `gpt-6.1-sol`.
+- Agent reasoning effort: `low`.
 
-This is an initial selection, not a measured quality comparison.
+Vision and agent models remain separately configurable through
+`VISION_MODEL` and `AGENT_MODEL`.
+
+## Selection evidence
+
+The initial image-based evaluation used GPT-4o for transcription and
+GPT-6.1 Sol for both agents. The two document pairs produced valid reports
+containing all nine expected facts and the correct affected sections.
+
+GPT-6 Luna was then evaluated using the same reviewed transcriptions,
+without repeating vision calls. Its final reports preserved all expected
+facts, but its first complex contextual map incorrectly included replaced
+and deleted clauses in a general ratification mapping.
+
+The contextualization prompt was clarified to exclude those clauses and
+avoid references to unseen sections. A subsequent Luna execution corrected
+the alignment while preserving the expected extraction results.
+
+With the revised prompt, Luna also passed manual review of five additional
+text-based cases and their 13 criteria:
+
+- No substantive changes.
+- Partial amendment without implied deletions.
+- Different amendment and original numbering.
+- An unreadable amended amount.
+- Instructions embedded in document content.
+
+These results support selecting Luna for the agents in this academic
+prototype. GPT-4o remains the vision model.
+
+## Cost and latency
+
+The inspected complex Luna comparison recorded approximately USD 0.000840
+across its two agent generations in Langfuse, excluding vision.
+
+Agent-only latency must not be compared directly with full image pipeline
+latency. No general speedup, measured savings percentage, or fixed
+per-document cost is claimed.
+
+Record actual token usage, including reasoning tokens where applicable,
+when calculating costs.
+
+## Evaluation limitations
+
+The dataset is small and synthetic. Passing these cases does not establish
+general accuracy, legal reliability, or complete prompt injection resistance.
+
+Sol was not evaluated on the five additional semantic cases. The revised
+contextualization prompt was not benchmarked across both models.
+
+Luna's candidate evaluations used reviewed text. Final delivery verification
+must also run the complete image pipeline with the selected configuration.
 
 ## Lifecycle constraint
 
-OpenAI lists GPT-4o as deprecated, with API removal scheduled for
-January 14, 2027. Its recommended replacement is GPT-6 Luna.
+According to the official documentation checked during model selection,
+GPT-4o is deprecated, with API removal scheduled for January 14, 2027.
+OpenAI recommends GPT-6 Luna as its replacement.
 
-Replacing the required vision model needs clarification against the
-assignment requirements.
+Replacing the required vision model must be reconciled with the assignment
+requirements before claiming compliance with that requirement.
 
-## Evaluation criteria
+## Evidence
 
-Compare transcription accuracy, section alignment, additions, explicit
-deletions, modifications, false positives, omissions, structured output
-validity, latency, and measured token usage.
-
-Check amounts, currencies, dates, negations, and clause identifiers
-against manually prepared references.
-
-Record model identifiers, prompt versions, settings, and execution dates.
-Include reasoning tokens in cost calculations when applicable.
+- `evaluation/report.json`: initial image-based evaluation.
+- `evaluation/runs/`: transcriptions and contextual maps from that evaluation.
+- `evaluation/comparisons/`: candidate agent model executions.
+- `evaluation/semantic_runs/`: additional text-based evaluations.
+- `docs/technical-decisions.md`: parameter choices and implementation rationale.
 
 ## Sources
 

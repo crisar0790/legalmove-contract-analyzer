@@ -1,0 +1,66 @@
+{
+  "started_at_utc": "2026-10-31T21:08:18.956135+00:00",
+  "agent_model": "gpt-6-luna",
+  "reasoning_effort": "low",
+  "context_max_output_tokens": 2048,
+  "extraction_max_output_tokens": 2048,
+  "max_retries": 2,
+  "request_timeout_seconds": 60.0,
+  "input_source": "Reviewed baseline transcriptions; vision not rerun.",
+  "prompt_sha256": {
+    "vision": "74f9435e178084cf2e431aab26cb299c5c4c66dff4cff8f84dc687d010ce1b4d",
+    "contextualization": "eb5aeaba4009dabdec69c86bf87df66a547e502f52da5bd5237c1a6e0ef3340d",
+    "extraction": "b8e128492dfdec03483fa90b5ab891dc9c88f7faca250dec514dd122ac76033e"
+  },
+  "semantic_review_status": "pending",
+  "cases": [
+    {
+      "case": "simple",
+      "execution_status": "success",
+      "trace_id": "f19c0ffb18321e1f5554d2db4b74933c",
+      "json_valid": true,
+      "latency_including_flush_seconds": 7.736850959001458,
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 3"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": null,
+        "correct_context_alignment": true,
+        "no_unsupported_claims": null,
+        "trace_verified": null,
+        "notes": ""
+      }
+    },
+    {
+      "case": "complex",
+      "execution_status": "success",
+      "trace_id": "a5556a3caf419c63ea14e07262a1a9df",
+      "json_valid": true,
+      "latency_including_flush_seconds": 9.33233445800579,
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 2",
+          "cláusula 4",
+          "cláusula 7"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": null,
+        "correct_context_alignment": false,
+        "no_unsupported_claims": null,
+        "trace_verified": null,
+        "notes": "The ratification mapping incorrectly includes original clauses 2 and 4, which are explicitly replaced and deleted. The final extraction report remains correct."
+      }
+    }
+  ]
+}

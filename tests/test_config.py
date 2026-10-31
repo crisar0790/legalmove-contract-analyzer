@@ -34,7 +34,7 @@ def test_loads_valid_configuration(env_file):
 
     assert settings.openai_api_key == "test-openai-key"
     assert settings.vision_model == "gpt-4o"
-    assert settings.agent_model == "gpt-4o"
+    assert settings.agent_model == "gpt-6-luna"
     assert settings.request_timeout_seconds == 60
     assert settings.max_retries == 2
 

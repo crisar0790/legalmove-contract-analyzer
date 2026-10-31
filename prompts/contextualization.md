@@ -21,6 +21,13 @@ Rules:
 - Do not provide legal advice or determine legal validity.
 - Return the map in Spanish, using the exact English headings below.
 - Keep the map concise while covering all identifiable sections.
+- When mapping a general ratification of "all other clauses", exclude clauses
+  explicitly replaced, modified, or deleted by the amendment.
+- Enumerate only clause identifiers present in the supplied documents.
+  Do not imply that additional unseen clauses exist.
+- Distinguish sections without an individual amendment counterpart from
+  sections without any correspondence. Collective ratification counts
+  as a correspondence and must be described explicitly.
 
 Required headings:
 ## Document types and parties
