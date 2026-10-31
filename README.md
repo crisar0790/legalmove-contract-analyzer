@@ -50,3 +50,13 @@ external integrations have not been implemented yet.
 This project is an academic prototype. Schema validation does not guarantee
 factual or legal accuracy, and its output does not replace professional
 legal review.
+
+## Development setup
+
+Use Python 3.12. The exact setup version is recorded in `.python-version`.
+
+Create and activate a virtual environment:
+
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
