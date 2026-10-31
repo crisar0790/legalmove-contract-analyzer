@@ -5,10 +5,19 @@ import warnings
 from dataclasses import dataclass
 from io import BytesIO
 from pathlib import Path
+from time import perf_counter
 
+from openai import OpenAI
+from openai.types.chat import ChatCompletion
 from PIL import Image, UnidentifiedImageError
 
-from src.exceptions import ImageValidationError
+from src.config import Settings, load_settings
+from src.exceptions import ImageValidationError, ModelResponseError
+from src.llm_client import (
+    build_vision_client,
+    call_with_retries,
+    validate_completion_text,
+)
 
 SUPPORTED_FORMATS = {
     "JPEG": "image/jpeg",
@@ -97,3 +106,121 @@ def encode_contract_image(
         size_bytes=len(content),
         data_uri=f"data:{mime_type};base64,{encoded_content}",
     )
+
+
+VISION_PROMPT_PATH = Path(__file__).resolve().parent.parent / "prompts" / "vision.md"
+
+
+@dataclass(frozen=True)
+class ParsedDocument:
+    """Transcribed text with measured API usage and execution metadata."""
+
+    text: str
+    model: str
+    response_id: str
+    finish_reason: str
+    usage: dict[str, object] | None
+    latency_seconds: float
+
+
+def _request_transcription(
+    image: EncodedImage,
+    *,
+    client: OpenAI,
+    settings: Settings,
+    prompt: str,
+) -> ChatCompletion:
+    """Send a validated image to the configured vision model."""
+    return client.chat.completions.create(
+        model=settings.vision_model,
+        messages=[
+            {"role": "system", "content": prompt},
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "Transcribe this document image faithfully.",
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": image.data_uri,
+                            "detail": "high",
+                        },
+                    },
+                ],
+            },
+        ],
+        max_completion_tokens=settings.vision_max_output_tokens,
+    )
+
+
+def _parse_with_client(
+    image: EncodedImage,
+    *,
+    client: OpenAI,
+    settings: Settings,
+    prompt: str,
+) -> ParsedDocument:
+    """Perform transcription and reject unusable responses."""
+    started = perf_counter()
+    response = call_with_retries(
+        lambda: _request_transcription(
+            image, client=client, settings=settings, prompt=prompt
+        ),
+        max_retries=settings.max_retries,
+    )
+    elapsed = perf_counter() - started
+
+    if not response.choices:
+        raise ModelResponseError("The model returned no completion choices.")
+
+    choice = response.choices[0]
+    text = validate_completion_text(
+        choice.message.content,
+        finish_reason=choice.finish_reason,
+        refusal=choice.message.refusal,
+    )
+    return ParsedDocument(
+        text=text,
+        model=response.model,
+        response_id=response.id,
+        finish_reason=choice.finish_reason,
+        usage=response.usage.model_dump() if response.usage is not None else None,
+        latency_seconds=elapsed,
+    )
+
+
+def parse_contract_document(
+    path: str | Path,
+    *,
+    settings: Settings | None = None,
+    client: OpenAI | None = None,
+) -> ParsedDocument:
+    """Validate and transcribe an image, retaining internal metadata."""
+    configuration = settings if settings is not None else load_settings()
+    image = encode_contract_image(
+        path, max_size_bytes=configuration.max_image_size_bytes
+    )
+    prompt = VISION_PROMPT_PATH.read_text(encoding="utf-8")
+
+    if client is not None:
+        return _parse_with_client(
+            image, client=client, settings=configuration, prompt=prompt
+        )
+
+    with build_vision_client(configuration) as owned_client:
+        return _parse_with_client(
+            image, client=owned_client, settings=configuration, prompt=prompt
+        )
+
+
+def parse_contract_image(
+    path: str | Path,
+    *,
+    settings: Settings | None = None,
+    client: OpenAI | None = None,
+) -> str:
+    """Return only the transcribed text through the public parser interface."""
+    return parse_contract_document(path, settings=settings, client=client).text

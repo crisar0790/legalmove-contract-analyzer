@@ -143,3 +143,21 @@ as successful reports.
 The model selection remains subject to requirement verification and real
 evaluation. GPT-4o is the initial baseline; vision and agent models remain
 separately configurable.
+
+## Multimodal transcription
+
+`parse_contract_image(path)` returns the document transcription as a string.
+`parse_contract_document(path)` additionally retains the returned model,
+response identifier, finish reason, token usage when available, and latency.
+
+Validated images are sent as base64 data URIs with high image detail.
+The transcription prompt preserves document language, clause numbering,
+amounts, dates, negations, and reading order.
+
+Unreadable fragments are marked `[ILEGIBLE]`. Empty responses, refusals,
+and incomplete completions are rejected.
+
+Transcription requires an OpenAI API call. Offline tests use simulated
+responses and do not demonstrate transcription accuracy.
+
+Langfuse instrumentation will be added in a later implementation step.
