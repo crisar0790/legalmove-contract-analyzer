@@ -1,0 +1,45 @@
+# Environment variables and local secrets
+.env
+.env.*
+!.env.example
+secrets/
+credentials/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python cache and build artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Test, coverage, and lint caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Temporary analysis outputs
+outputs/*
+!outputs/examples/
+!outputs/examples/**
+
+# Local logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Editor and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
