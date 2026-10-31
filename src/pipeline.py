@@ -1,7 +1,7 @@
 """Orchestrate image transcription and specialized contract agents."""
 
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 from langchain_core.runnables import RunnableConfig
@@ -16,6 +16,15 @@ from src.image_parser import (
 )
 from src.llm_client import build_agent_client, build_vision_client
 from src.models import ContractChangeOutput
+from src.observability import (
+    TelemetryError,
+    build_callback,
+    build_langfuse_client,
+    current_trace_id,
+    observation,
+    tracing_session,
+    update_output,
+)
 
 
 @dataclass(frozen=True)
@@ -49,25 +58,57 @@ class ContractAnalysisPipeline:
         *,
         config: RunnableConfig | None = None,
     ) -> PipelineResult:
-        """Analyze two images, stopping immediately on any stage failure."""
+        """Analyze two images with observable stages and exact handoff."""
         original_path = Path(original_path)
         amendment_path = Path(amendment_path)
 
-        for path in (original_path, amendment_path):
-            encode_contract_image(
-                path,
-                max_size_bytes=self._settings.max_image_size_bytes,
+        with observation("validate_inputs") as span:
+            for path in (original_path, amendment_path):
+                encode_contract_image(
+                    path,
+                    max_size_bytes=self._settings.max_image_size_bytes,
+                )
+            update_output(span, {"valid": True})
+
+        with observation(
+            "parse_original_contract",
+            input={"filename": original_path.name},
+        ) as span:
+            original = self._parser(original_path)
+            update_output(span, original.text)
+
+        with observation(
+            "parse_amendment_contract",
+            input={"filename": amendment_path.name},
+        ) as span:
+            amendment = self._parser(amendment_path)
+            update_output(span, amendment.text)
+
+        with observation(
+            "contextualization_agent",
+            input={
+                "original": original.text,
+                "amendment": amendment.text,
+            },
+        ) as span:
+            contextual_map = self._contextualization_agent.run(
+                original.text, amendment.text, config=config
             )
+            update_output(span, contextual_map)
 
-        original = self._parser(original_path)
-        amendment = self._parser(amendment_path)
+        with observation(
+            "extraction_agent",
+            input={
+                "original": original.text,
+                "amendment": amendment.text,
+                "contextual_map": contextual_map,
+            },
+        ) as span:
+            analysis = self._extraction_agent.run(
+                original.text, amendment.text, contextual_map, config=config
+            )
+            update_output(span, analysis.model_dump())
 
-        contextual_map = self._contextualization_agent.run(
-            original.text, amendment.text, config=config
-        )
-        analysis = self._extraction_agent.run(
-            original.text, amendment.text, contextual_map, config=config
-        )
         return PipelineResult(analysis=analysis)
 
 
@@ -106,3 +147,42 @@ def analyze_contracts(
             ),
         )
         return pipeline.run(original_path, amendment_path, config=config)
+
+
+def analyze_contracts_traced(
+    original_path: str | Path,
+    amendment_path: str | Path,
+    *,
+    settings: Settings,
+) -> PipelineResult:
+    """Execute the workflow under one Langfuse root observation."""
+    client = build_langfuse_client(settings)
+
+    with tracing_session(client):
+        with observation(
+            "contract-analysis",
+            input={
+                "original": Path(original_path).name,
+                "amendment": Path(amendment_path).name,
+            },
+            metadata={
+                "vision_model": settings.vision_model,
+                "agent_model": settings.agent_model,
+                "max_retries": settings.max_retries,
+                "vision_max_output_tokens": settings.vision_max_output_tokens,
+                "context_max_output_tokens": settings.context_max_output_tokens,
+                "extraction_max_output_tokens": (settings.extraction_max_output_tokens),
+            },
+        ) as root:
+            trace_id = current_trace_id()
+            if trace_id is None:
+                raise TelemetryError("No active Langfuse trace was created.")
+
+            result = analyze_contracts(
+                original_path,
+                amendment_path,
+                settings=settings,
+                config={"callbacks": [build_callback(settings)]},
+            )
+            update_output(root, result.analysis.model_dump())
+            return replace(result, trace_id=trace_id)

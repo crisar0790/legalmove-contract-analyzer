@@ -68,7 +68,9 @@ class ExtractionAgent:
             strict=True,
             include_raw=True,
         )
-        self._chain = prompt | structured_model
+        self._chain = prompt | structured_model.with_config(
+            {"run_name": "extract_and_validate_output"}
+        )
         self._max_retries = max_retries
 
     def run(

@@ -3,6 +3,7 @@
 import base64
 import warnings
 from dataclasses import dataclass
+from hashlib import sha256
 from io import BytesIO
 from pathlib import Path
 from time import perf_counter
@@ -18,6 +19,7 @@ from src.llm_client import (
     call_with_retries,
     validate_completion_text,
 )
+from src.observability import trace_vision_call
 
 SUPPORTED_FORMATS = {
     "JPEG": "image/jpeg",
@@ -123,7 +125,7 @@ class ParsedDocument:
     latency_seconds: float
 
 
-def _request_transcription(
+def _request_transcription_untraced(
     image: EncodedImage,
     *,
     client: OpenAI,
@@ -153,6 +155,31 @@ def _request_transcription(
             },
         ],
         max_completion_tokens=settings.vision_max_output_tokens,
+    )
+
+
+def _request_transcription(
+    image: EncodedImage,
+    *,
+    client: OpenAI,
+    settings: Settings,
+    prompt: str,
+) -> ChatCompletion:
+    """Trace each API attempt without recording the image payload."""
+    return trace_vision_call(
+        lambda: _request_transcription_untraced(
+            image, client=client, settings=settings, prompt=prompt
+        ),
+        model=settings.vision_model,
+        prompt=prompt,
+        image_metadata={
+            "filename": image.path.name,
+            "mime_type": image.mime_type,
+            "size_bytes": image.size_bytes,
+            "data_uri_sha256": sha256(image.data_uri.encode("ascii")).hexdigest(),
+            "prompt_sha256": sha256(prompt.encode("utf-8")).hexdigest(),
+        },
+        max_output_tokens=settings.vision_max_output_tokens,
     )
 
 

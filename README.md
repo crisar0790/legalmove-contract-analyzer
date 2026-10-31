@@ -239,3 +239,27 @@ unset until observability is implemented.
 
 Offline integration tests verify ordering, input handoff, and failure
 propagation. Real image-based executions are evaluated separately.
+
+## Observability
+
+`analyze_contracts_traced()` records the workflow under one Langfuse root
+named `contract-analysis`.
+
+Child observations cover input validation, both image transcriptions,
+contextualization, and extraction. Vision requests are instrumented manually;
+agent generations and structured parsing are captured through LangChain
+callbacks.
+
+Vision traces record image metadata and a data URI hash instead of base64
+payloads. Agent traces contain transcribed document text and the contextual
+map. Use fictional documents for public demonstrations.
+
+Pydantic validation occurs inside `extract_and_validate_output`.
+There is no separate span pretending to repeat that validation.
+
+Trace identifiers remain internal and are excluded from the public report.
+Flush waiting is bounded to 10 seconds. A timeout does not cancel the SDK
+flush or prove delivery; inspect the dashboard to confirm receipt.
+
+If analysis and telemetry flushing both fail, the original analysis error
+is preserved and the telemetry failure is logged separately.
