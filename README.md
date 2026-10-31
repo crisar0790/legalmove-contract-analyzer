@@ -1,319 +1,349 @@
 # LegalMove — Contract Analyzer
 
-LegalMove is an academic Python project that compares an original contract
-and an amendment provided as JPEG or PNG images.
+LegalMove compares an original contract and an amendment supplied as JPEG or
+PNG images. It transcribes both documents with GPT-4o, coordinates two
+specialized LangChain agents, and returns a JSON report validated with Pydantic.
+Langfuse records the workflow, model generations, inputs, outputs, and usage.
 
-The application will transcribe both documents with GPT-4o Vision, coordinate
-two specialized agents through LangChain, and produce a structured report
-validated with Pydantic. Langfuse will provide workflow observability.
+This is an academic prototype. Its output does not replace professional legal
+review, and schema validation does not establish factual or legal accuracy.
 
-## Project goals
+## Features and scope
 
-- Extract document text while preserving clause numbering and structure.
-- Map sections and relationships between the original contract and its amendment.
-- Identify additions, deletions, and modifications supported by the documents.
-- Validate the final report before exporting it as JSON.
-- Trace model calls and workflow stages, including token usage and latency.
+- Validate both input images before making model requests.
+- Preserve clause numbering, amounts, dates, currencies, and negations during
+  transcription; mark unreadable fragments as `[ILEGIBLE]`.
+- Map original and amendment sections with `ContextualizationAgent`.
+- Identify supported modifications, additions, and explicit deletions with
+  `ExtractionAgent`.
+- Export exactly three required fields as validated JSON.
+- Trace successful workflows and failures under one Langfuse root.
+- Run offline regression tests and separate, opt-in API evaluations.
 
-## Planned workflow
+The CLI accepts user-provided image paths, not only the included fixtures.
+Each input represents one image; multi-page document assembly, PDF ingestion,
+a web interface, RAG, and vector databases are not implemented.
 
-1. Validate both input images.
-2. Transcribe the original contract and amendment.
-3. Map document sections with `ContextualizationAgent`.
-4. Identify changes with `ExtractionAgent`.
-5. Validate the report with Pydantic.
-6. Return the JSON report and record the workflow in Langfuse.
+## Architecture
 
-## Output schema
+```mermaid
+flowchart TD
+    I["Original and amendment images"] --> V["Validate both inputs"]
+    V --> T["Transcribe each image with GPT-4o"]
+    T --> C["ContextualizationAgent: section map"]
+    T --> E["ExtractionAgent: compare source texts"]
+    C --> E
+    E --> P["Structured output and Pydantic validation"]
+    P --> J["Three-field JSON report"]
+```
 
-The final report will contain exactly these fields:
+The extractor receives both full transcriptions and the contextual map. The map
+guides alignment but does not replace the source documents. Clauses omitted
+from a partial amendment are not automatically considered deleted.
 
-- `sections_changed`: identifiers of modified, added, or deleted sections.
-- `topics_touched`: topics affected by the changes.
-- `summary_of_the_change`: a summary supported by the source documents.
+The agents have separate classes and system prompts. They run as explicit
+LangChain chains; no autonomous tool loop or LangGraph is required. Separation
+helps inspect alignment and extraction independently, but does not by itself
+prove better accuracy than a single-agent approach.
 
-## Scope
+A successful workflow without retries makes four model calls: two vision
+requests and one request per agent. Dependent stages stop when an earlier stage
+fails. The pipeline does not retry the entire workflow.
 
-The initial implementation will provide a command-line interface and two
-synthetic document pairs: a simple case and a complex case.
+## Requirements and installation
 
-PDF ingestion, a web interface, RAG, and vector databases are outside the
-required scope.
+- Python 3.12; the exact setup version is recorded in `.python-version`.
+- An OpenAI API key with access to the configured models and API billing.
+- A Langfuse project, its API credentials, and its regional base URL.
+- Network access for real analysis; offline tests need no real credentials.
 
-## Project status
-
-Repository initialized. The analysis pipeline, dependencies, tests, and
-external integrations have not been implemented yet.
-
-## Limitations
-
-This project is an academic prototype. Schema validation does not guarantee
-factual or legal accuracy, and its output does not replace professional
-legal review.
-
-## Development setup
-
-Use Python 3.12. The exact setup version is recorded in `.python-version`.
-
-Create and activate a virtual environment:
+From a local checkout of this repository:
 
 ```bash
+cd legalmove-contract-analyzer
 python3.12 -m venv .venv
 source .venv/bin/activate
+python -m pip install -r requirements-dev.txt
+python -m pip check
 ```
+
+On Windows, activate the environment with `.venv\Scripts\Activate.ps1` in
+PowerShell. Runtime-only installation uses `requirements.txt`; development
+tools are pinned in `requirements-dev.txt`, which includes runtime dependencies.
 
 ## Configuration
 
-Copy `.env.example` to `.env` and configure the OpenAI and Langfuse
-credentials. Set `LANGFUSE_HOST` to the base URL for your Langfuse project.
+```bash
+cp .env.example .env
+```
 
-Configuration is loaded explicitly with `load_settings()`. Process environment
-variables take precedence over `.env`. Loading configuration does not create
-clients or make network requests.
+Complete credentials in `.env`. Never commit that file. Configuration is loaded
+explicitly, with process environment variables taking precedence over `.env`.
+The project `.env` is resolved from the source location, not an accidental
+working directory. Loading settings does not make network requests.
 
-Vision and agent models are configured separately, with `gpt-4o` as the
-initial baseline.
+| Variable | Purpose | Current default or example |
+| --- | --- | --- |
+| `OPENAI_API_KEY` | OpenAI credential | Required |
+| `LANGFUSE_PUBLIC_KEY` | Langfuse project public key | Required |
+| `LANGFUSE_SECRET_KEY` | Langfuse project secret key | Required |
+| `LANGFUSE_HOST` | Regional Langfuse base URL | Required; for example `https://cloud.langfuse.com` for EU |
+| `VISION_MODEL` | Image transcription model | `gpt-4o` |
+| `AGENT_MODEL` | Model for both agents | `gpt-6-luna` |
+| `REQUEST_TIMEOUT_SECONDS` | Timeout per HTTP attempt | `60` |
+| `MAX_RETRIES` | Additional attempts for transient API errors | `2`; zero is valid |
+| `VISION_MAX_OUTPUT_TOKENS` | Vision output budget | `4096` |
+| `CONTEXT_MAX_OUTPUT_TOKENS` | Context agent output budget | `2048` |
+| `EXTRACTION_MAX_OUTPUT_TOKENS` | Extraction agent output budget | `2048` |
+| `MAX_IMAGE_SIZE_BYTES` | Maximum encoded-file input size in bytes | `10000000` |
 
-Timeouts apply per HTTP attempt. `MAX_RETRIES=N` allows at most `N+1`
-attempts per logical model call; zero retries is valid. Client integration
-will enforce this budget in a later implementation step.
+Use the base URL for your actual Langfuse region, without `/api/public`.
+`LANGFUSE_HOST` is explicitly mapped to the SDK's `base_url` parameter.
+Agent clients use Responses API and reasoning effort `low`; this setting is
+currently supplied by the client factory rather than an environment variable.
+Agent output budgets cover reasoning and visible output tokens.
 
-Output token budgets and the image size limit are initial application
-settings and will be reviewed during evaluation.
+### Model selection
 
-Run offline tests with:
+The selected configuration is GPT-4o for vision and GPT-6 Luna for both agents.
+GPT-6.1 Sol was the initial evaluation baseline. Luna was selected after review
+of the two baseline text pairs and five additional semantic cases with the
+refined contextualization prompt.
+
+The lifecycle documentation checked during selection lists GPT-4o as deprecated,
+with API removal scheduled for January 14, 2027. It remains configured to
+preserve the assignment requirement recorded in the project plan. Any
+replacement must be reconciled with that requirement.
+
+See [model selection](docs/model-selection.md) and
+[technical decisions](docs/technical-decisions.md) for evidence, tradeoffs,
+settings, limitations, and official sources.
+
+## Command-line usage
+
+Run from the repository root with the virtual environment active:
 
 ```bash
-python -m pytest
+python -m src.main --help
+mkdir -p outputs
+```
 
-## Output validation
+Simple case:
 
-`ContractChangeOutput` defines exactly three required fields:
+```bash
+python -m src.main \
+  data/test_contracts/simple_original.png \
+  data/test_contracts/simple_amendment.png \
+  --output outputs/simple.json
+```
+
+Complex case:
+
+```bash
+python -m src.main \
+  data/test_contracts/complex_original.png \
+  data/test_contracts/complex_amendment.png \
+  --output outputs/complex.json
+```
+
+Other documents, including paths containing spaces:
+
+```bash
+python -m src.main \
+  "/path/to/original contract.png" \
+  "/path/to/contract amendment.jpg" \
+  --output outputs/custom.json \
+  --verbose
+```
+
+The last command is a template: replace both paths with existing files.
+Omit `--output` to print the report without saving a file. The destination
+directory must already exist and the output path must differ from both inputs.
+Existing reports are replaced only after analysis succeeds and the complete
+report is written to a temporary file.
+
+Successful analysis writes only JSON to stdout. Trace IDs, errors, and
+diagnostics go to stderr; both streams may appear together in a terminal.
+`--verbose` displays the configured models and additional failure diagnostics.
+
+```bash
+python -m json.tool outputs/simple.json
+```
+
+| Exit code | Meaning |
+| --- | --- |
+| `0` | Analysis and requested report writing succeeded |
+| `1` | Configuration, analysis, telemetry, or output failure |
+| `2` | Invalid command-line arguments |
+
+Real analysis consumes OpenAI API usage and sends telemetry to Langfuse.
+
+## Output contract
+
+`ContractChangeOutput` contains exactly these required fields:
 
 | Field | Type | Meaning |
 | --- | --- | --- |
-| `sections_changed` | `list[str]` | Modified, added, or explicitly deleted section identifiers |
+| `sections_changed` | `list[str]` | Modified, added, or explicitly deleted clause identifiers |
 | `topics_touched` | `list[str]` | Topics affected by the changes |
-| `summary_of_the_change` | `str` | Summary supported by the source documents |
+| `summary_of_the_change` | `str` | Supported changes, relevant previous/new values, and material uncertainty |
 
-Validation rejects additional fields, incorrect types, blank list items,
-and blank summaries. Empty lists are allowed for reports without changes.
-Valid text is preserved without automatic trimming or deduplication.
-
-Illustrative output, not a measured model result:
+Example from the reviewed Luna text-based comparison:
 
 ```json
 {
   "sections_changed": ["Cláusula 3"],
   "topics_touched": ["Condiciones de pago"],
-  "summary_of_the_change": "La cláusula 3 modifica el importe mensual de USD 500 a USD 650 y el vencimiento del día 5 al día 10."
+  "summary_of_the_change": "Modificación de la cláusula 3, efectiva a partir del 1 de julio de 2026: el pago mensual aumenta de USD 500 a USD 650 y la fecha de vencimiento cambia del día 5 al día 10 de cada mes. La adenda ratifica que las demás cláusulas permanecen vigentes sin modificaciones."
 }
 ```
 
-Schema validation checks the report structure. Factual accuracy and
-completeness must be evaluated against the source documents separately.
+Pydantic rejects extra fields, missing fields, incorrect types, blank list
+items, and blank summaries. Empty lists are valid for a conclusive no-change
+case. Text is not automatically trimmed or deduplicated by the schema.
+The prompts request Spanish maps, topics, and summaries while transcription
+preserves the original language.
 
-## Image input validation
+`PipelineResult` is an internal container holding the validated analysis,
+optional trace ID, transcriptions, and contextual map. These additional fields
+are not part of the public JSON report.
 
-Input images are validated locally before model requests.
+## Validation and error handling
 
-Validation checks file availability, readability, byte size, actual JPEG/PNG
-content, and successful decoding. Empty, corrupted, unsupported, and oversized
-files are rejected.
+Both input images are checked locally for existence, readability, byte size,
+actual JPEG/PNG content, and successful decoding. MIME detection uses content,
+not filename extensions. Validated bytes are sent as base64 data URIs with
+high image detail. No traditional OCR engine is used.
 
-MIME types are detected from image content rather than filename extensions.
-Valid images are encoded as base64 data URIs without modifying their bytes.
+`parse_contract_image()` returns text; `parse_contract_document()` also retains
+the returned model, response ID, completion status, usage when available, and
+latency. Unreadable fragments must remain uncertain rather than being silently
+completed.
 
-The byte limit is configured through `MAX_IMAGE_SIZE_BYTES`.
-Image validation and encoding require no API credentials or network access.
+SDK retries are disabled. The shared wrapper retries eligible connection
+failures, timeouts, HTTP 408/409/429, and server errors with bounded backoff.
+Each logical call permits at most `MAX_RETRIES + 1` attempts. A per-attempt
+timeout is not a global workflow deadline.
 
-## Model clients and API errors
+Refusals, incomplete responses, empty outputs, and structured validation
+failures do not produce successful reports. There is no automatic repair or
+invented field completion. Application API error messages omit provider bodies.
 
-Vision and agent clients are constructed explicitly from application settings.
-SDK retries are disabled; `call_with_retries()` owns the retry budget.
+## Langfuse observability
 
-Connection failures, timeouts, HTTP 408, 409, 429, and server errors may be
-retried with bounded exponential backoff. Other HTTP errors fail immediately.
-Each logical call allows at most `MAX_RETRIES + 1` attempts.
+The CLI calls `analyze_contracts_traced()`, creating one `contract-analysis`
+root before input validation. Its stages are `validate_inputs`,
+`parse_original_contract`, `parse_amendment_contract`,
+`contextualization_agent`, and `extraction_agent`.
 
-Application error messages omit provider response bodies. Empty text,
-refusals, and incomplete text completions are rejected rather than published
-as successful reports.
+Vision requests have manually recorded generations, including individual
+retry attempts. LangChain callbacks capture agent generations and parsers.
+Pydantic validation occurs inside `extract_and_validate_output`; a separate
+empty post-validation span is not created. Auxiliary chain observations are
+expected and should not be counted as extra LLM generations.
 
-The model selection remains subject to requirement verification and real
-evaluation. GPT-4o is the initial baseline; vision and agent models remain
-separately configurable.
+Vision traces retain image metadata and a data URI hash instead of base64.
+Agent traces include the document transcriptions and contextual map. Use
+fictional documents for public demonstrations and consider these transfers
+before analyzing private documents.
 
-## Multimodal transcription
+The application waits up to 10 seconds for SDK flushing on success and error
+paths. This does not cancel an internal flush or prove remote receipt. Inspect
+the trace in the dashboard to confirm delivery, hierarchy, model usage, and
+error states. If analysis and flushing both fail, the analysis error is
+preserved and the telemetry failure is logged separately.
 
-`parse_contract_image(path)` returns the document transcription as a string.
-`parse_contract_document(path)` additionally retains the returned model,
-response identifier, finish reason, token usage when available, and latency.
+Untraced `analyze_contracts()` and injected pipeline components are available
+for offline tests; their trace IDs remain unset.
 
-Validated images are sent as base64 data URIs with high image detail.
-The transcription prompt preserves document language, clause numbering,
-amounts, dates, negations, and reading order.
+## Tests and evaluation
 
-Unreadable fragments are marked `[ILEGIBLE]`. Empty responses, refusals,
-and incomplete completions are rejected.
-
-Transcription requires an OpenAI API call. Offline tests use simulated
-responses and do not demonstrate transcription accuracy.
-
-Langfuse instrumentation will be added in a later implementation step.
-
-## Contextualization agent
-
-`ContextualizationAgent` maps original and amendment sections through an
-explicit LangChain prompt-model-validation-parser chain.
-
-The model is injected into the constructor. The agent receives both document
-texts, distinguishes their numbering, and identifies correspondences,
-unmatched sections, and ambiguities.
-
-It produces a contextual map in Spanish, not the final change report.
-Document content is treated as untrusted data; prompt instructions alone
-do not guarantee protection against prompt injection.
-
-The agent client uses Responses API with an initial low reasoning effort.
-Its output budget includes reasoning and visible output tokens.
-Incomplete, refused, empty, or unconfirmed completion states are rejected.
-
-Offline tests verify wiring and error handling. Semantic alignment must
-also be checked using real model responses against the reference documents.
-
-## Extraction agent
-
-`ExtractionAgent` receives the original text, amendment text, and contextual
-map. The map guides alignment but does not replace the source documents.
-
-Its specialized prompt covers modifications, additions, explicit deletions,
-unmatched sections, and uncertainty. Omission from a partial amendment is
-not treated as deletion.
-
-The agent requests structured output using `ContractChangeOutput`.
-It checks the raw response completion state and rejects parsing failures
-or missing validated reports. No automatic repair is performed.
-
-The returned report contains exactly the three public fields. Structural
-validation does not establish factual accuracy; findings must be checked
-against the reference documents.
-
-## Output failure policy
-
-Extraction succeeds only when the raw model response is completed,
-contains usable text, and the structured integration returns a validated
-`ContractChangeOutput` without parsing errors.
-
-Malformed JSON, missing fields, additional fields, incorrect types,
-blank values, refusals, and incomplete responses are rejected.
-
-Validation failures do not trigger API retries or automatic repair.
-No missing fields are filled with invented content.
-
-Pydantic validation occurs inside the structured model integration.
-The acceptance boundary checks that result and the raw response status;
-it does not represent a second independent semantic validation.
-
-## Analysis pipeline
-
-`analyze_contracts()` connects image transcription and both specialized agents.
-
-Execution order:
-
-1. Validate both input images locally.
-2. Transcribe the original contract.
-3. Transcribe the amendment.
-4. Build the contextual map from both transcriptions.
-5. Extract a validated report using both transcriptions and the map.
-
-A failed stage prevents dependent stages from running. The pipeline does not
-retry the entire workflow; model calls retain their individual retry budgets.
-
-A successful execution without retries makes four model calls: two vision
-calls and one call per agent.
-
-The internal `PipelineResult` contains `analysis` and an optional `trace_id`.
-Only `analysis` belongs to the public JSON output. Trace identifiers remain
-unset until observability is implemented.
-
-Offline integration tests verify ordering, input handoff, and failure
-propagation. Real image-based executions are evaluated separately.
-
-## Observability
-
-`analyze_contracts_traced()` records the workflow under one Langfuse root
-named `contract-analysis`.
-
-Child observations cover input validation, both image transcriptions,
-contextualization, and extraction. Vision requests are instrumented manually;
-agent generations and structured parsing are captured through LangChain
-callbacks.
-
-Vision traces record image metadata and a data URI hash instead of base64
-payloads. Agent traces contain transcribed document text and the contextual
-map. Use fictional documents for public demonstrations.
-
-Pydantic validation occurs inside `extract_and_validate_output`.
-There is no separate span pretending to repeat that validation.
-
-Trace identifiers remain internal and are excluded from the public report.
-Flush waiting is bounded to 10 seconds. A timeout does not cancel the SDK
-flush or prove delivery; inspect the dashboard to confirm receipt.
-
-If analysis and telemetry flushing both fail, the original analysis error
-is preserved and the telemetry failure is logged separately.
-
-## Command-line usage
-
-Run commands from the repository root with the virtual environment active.
-
-Show help:
+Offline checks make no real model calls:
 
 ```bash
-python -m src.main --help
+python -m pytest
+python -m ruff check .
+python -m ruff format --check src tests evaluation
 ```
 
-Analyze the simple case and save its validated report:
+Tests cover configuration, image validation, strict output types, API retry
+bounds, unusable responses, agent handoff, pipeline failures, CLI streams and
+exit codes, report replacement, telemetry handling, and evaluation metrics.
+Mocks establish implementation behavior, not model comprehension.
+
+Real evaluations are separate and consume API usage:
 
 ```bash
-mkdir -p outputs
-python -m src.main data/test_contracts/simple_original.png data/test_contracts/simple_amendment.png --output outputs/simple.json
+python -m evaluation.run_evaluation
+python -m evaluation.compare_agents --model gpt-6-luna
+python -m evaluation.run_semantic_evaluation --model gpt-6-luna
 ```
 
-Analyze the complex case:
+`run_evaluation` runs vision and both agents using the currently configured
+models. It replaces `evaluation/report.json`, `evaluation/runs/` case evidence,
+and selected files in `outputs/examples/`; archive earlier evidence before
+rerunning it. `--case simple` or `--case complex` runs only that pair and produces
+a report containing only that selection.
 
-```bash
-python -m src.main data/test_contracts/complex_original.png data/test_contracts/complex_amendment.png --output outputs/complex.json
-```
+`compare_agents` reuses reviewed baseline transcriptions, excluding vision.
+`run_semantic_evaluation` uses `evaluation/semantic_cases.json`. Both save new
+timestamped evidence directories. Execution success and section metrics do not
+automatically approve semantic criteria; manual review remains separate.
 
-Use quotes around paths containing spaces. Add `--verbose` to display
-model identifiers and additional failure diagnostics.
+### Reviewed evidence
 
-Successful analysis writes only the three-field JSON report to stdout.
-Trace identifiers, diagnostics, and errors go to stderr.
+| Evaluation | Configuration | Observed result |
+| --- | --- | --- |
+| Two image pairs | GPT-4o + GPT-6.1 Sol | Correct sections, nine expected facts, faithful transcriptions |
+| Same reviewed text pairs | GPT-6 Luna, refined context prompt | Correct sections, complete findings, corrected ratification alignment |
+| Five additional text cases | GPT-6 Luna, refined context prompt | All 13 prepared criteria passed manual review |
 
-The optional output directory must already exist. The output path must
-differ from both input images. Existing reports are replaced only after
-analysis succeeds and the complete new report is written.
+The semantic cases cover no changes, a partial amendment, different numbering,
+an unreadable amount, and embedded document instructions. The unreadable-text
+case does not test whether vision detects a blurred image correctly.
 
-Exit codes:
-- `0`: analysis and requested output writing succeeded.
-- `1`: configuration, analysis, telemetry, or output failure.
-- `2`: invalid command-line arguments.
+The initial image evidence used Sol. Luna candidate evaluation used text;
+complete image-based delivery verification with the final configuration
+remains a separate final check. Trace review flags record only traces actually
+inspected. Agent usage is available in Langfuse but not collected in the local
+evaluation report. No general accuracy percentage or speedup is claimed.
 
-Real analysis sends documents to OpenAI and transcribed text to Langfuse.
-Commands incur API usage. Offline tests do not call external services.
+See [evaluation notes](docs/evaluation.md),
+[evaluation instructions](evaluation/README.md), and
+[fixture references](data/test_contracts/reference/).
 
-## Regression and semantic evaluation
+## Project structure
 
-Offline regression tests cover API failure handling, structured output
-rejection, pipeline failure propagation, CLI behavior, safe report
-replacement, and telemetry flush handling.
+| Path | Responsibility |
+| --- | --- |
+| `src/main.py` | CLI, output files, stdout/stderr, and exit codes |
+| `src/config.py` | Explicit environment loading and configuration validation |
+| `src/models.py` | Strict public Pydantic output schema |
+| `src/image_parser.py` | Image validation, base64 encoding, and transcription |
+| `src/llm_client.py` | Client factories, retries, and agent response checks |
+| `src/agents/contextualization_agent.py` | Section inventories and correspondences |
+| `src/agents/extraction_agent.py` | Supported changes and structured output acceptance |
+| `src/pipeline.py` | Stage ordering, handoff, and traced execution |
+| `src/observability.py` | Langfuse sessions, stages, vision generations, and flushing |
+| `src/exceptions.py` | Domain exceptions |
+| `prompts/` | Separate versioned system prompts |
+| `data/test_contracts/` | Four fictional images and manual references |
+| `tests/` | Offline regression tests |
+| `evaluation/` | Real evaluation scripts, reports, and intermediate evidence |
+| `outputs/examples/` | Selected actual reports; provenance is recorded in evaluation evidence |
+| `docs/` | Evaluation, model selection, and technical decisions |
 
-Additional text-based agent evaluation cases are defined in
-`evaluation/semantic_cases.json`. They cover no changes, partial amendments,
-different numbering, unreadable amounts, and document instructions.
+## Limitations
 
-Preparing these cases does not establish that the models pass them.
-Real semantic evaluation and image-based evaluation are recorded separately.
+- Small synthetic datasets do not establish performance on arbitrary contracts.
+- Blurred scans, handwriting, and long documents have not been established as
+  reliable inputs. Budgets may require adjustment for longer documents.
+- Pydantic validates structure; supported meaning requires source review.
+- Prompt instructions and one injection test do not guarantee resistance to
+  adversarial document content.
+- Two agents were not benchmarked against a single-agent implementation.
+- Model aliases, service behavior, availability, and prices can change.
+- Telemetry submission is asynchronous; a local trace ID alone is not proof
+  of a complete remotely stored trace.
+- Final clean-checkout verification and defense preparation are separate
+  delivery tasks, not completed merely by passing unit tests.
