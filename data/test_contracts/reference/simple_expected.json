@@ -1,0 +1,20 @@
+{
+  "original_image": "simple_original.png",
+  "amendment_image": "simple_amendment.png",
+  "sections_changed": [
+    "Cláusula 3"
+  ],
+  "change_types": [
+    "modification"
+  ],
+  "expected_facts": [
+    "El importe mensual cambia de USD 500 a USD 650.",
+    "El vencimiento cambia del día 5 al día 10 de cada mes.",
+    "Los cambios se aplican desde el 1 de julio de 2026."
+  ],
+  "unchanged_facts": [
+    "El objeto continúa siendo el mantenimiento del sitio web.",
+    "La vigencia termina el 31 de diciembre de 2026.",
+    "Se mantienen la confidencialidad y el preaviso de 30 días."
+  ]
+}

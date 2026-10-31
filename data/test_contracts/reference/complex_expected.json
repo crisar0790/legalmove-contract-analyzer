@@ -1,0 +1,28 @@
+{
+  "original_image": "complex_original.png",
+  "amendment_image": "complex_amendment.png",
+  "sections_changed": [
+    "Cláusula 2",
+    "Cláusula 4",
+    "Cláusula 7"
+  ],
+  "change_types": [
+    "modification",
+    "deletion",
+    "addition"
+  ],
+  "expected_facts": [
+    "La cláusula 2 amplía el territorio de Argentina a Argentina, Chile y Uruguay.",
+    "La cláusula 4 se elimina expresamente: queda sin efecto la prohibición de capacitaciones internas.",
+    "Se agrega la cláusula 7 de soporte técnico remoto.",
+    "El soporte se brinda de lunes a viernes de 09:00 a 18:00, hora de Argentina.",
+    "La primera respuesta tiene un plazo máximo de 24 horas hábiles.",
+    "Los cambios entran en vigor el 1 de julio de 2026."
+  ],
+  "unchanged_facts": [
+    "El precio se mantiene en USD 1200 anuales.",
+    "El vencimiento del pago sigue siendo el 15 de enero.",
+    "La vigencia termina el 31 de diciembre de 2026.",
+    "La confidencialidad permanece vigente."
+  ]
+}
