@@ -126,3 +126,20 @@ Valid images are encoded as base64 data URIs without modifying their bytes.
 
 The byte limit is configured through `MAX_IMAGE_SIZE_BYTES`.
 Image validation and encoding require no API credentials or network access.
+
+## Model clients and API errors
+
+Vision and agent clients are constructed explicitly from application settings.
+SDK retries are disabled; `call_with_retries()` owns the retry budget.
+
+Connection failures, timeouts, HTTP 408, 409, 429, and server errors may be
+retried with bounded exponential backoff. Other HTTP errors fail immediately.
+Each logical call allows at most `MAX_RETRIES + 1` attempts.
+
+Application error messages omit provider response bodies. Empty text,
+refusals, and incomplete text completions are rejected rather than published
+as successful reports.
+
+The model selection remains subject to requirement verification and real
+evaluation. GPT-4o is the initial baseline; vision and agent models remain
+separately configurable.
