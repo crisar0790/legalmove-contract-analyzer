@@ -214,3 +214,28 @@ No missing fields are filled with invented content.
 Pydantic validation occurs inside the structured model integration.
 The acceptance boundary checks that result and the raw response status;
 it does not represent a second independent semantic validation.
+
+## Analysis pipeline
+
+`analyze_contracts()` connects image transcription and both specialized agents.
+
+Execution order:
+
+1. Validate both input images locally.
+2. Transcribe the original contract.
+3. Transcribe the amendment.
+4. Build the contextual map from both transcriptions.
+5. Extract a validated report using both transcriptions and the map.
+
+A failed stage prevents dependent stages from running. The pipeline does not
+retry the entire workflow; model calls retain their individual retry budgets.
+
+A successful execution without retries makes four model calls: two vision
+calls and one call per agent.
+
+The internal `PipelineResult` contains `analysis` and an optional `trace_id`.
+Only `analysis` belongs to the public JSON output. Trace identifiers remain
+unset until observability is implemented.
+
+Offline integration tests verify ordering, input handoff, and failure
+propagation. Real image-based executions are evaluated separately.
