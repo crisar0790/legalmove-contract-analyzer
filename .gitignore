@@ -43,3 +43,8 @@ outputs/*
 .idea/
 .DS_Store
 Thumbs.db
+
+# Course-provided images kept locally
+data/course_contracts/*.jpg
+data/course_contracts/*.jpeg
+data/course_contracts/*.png

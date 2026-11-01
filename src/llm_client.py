@@ -107,6 +107,11 @@ def validate_completion_text(
     """Reject refusals, incomplete responses, and missing text."""
     if refusal is not None:
         raise ModelResponseError("The model refused the request.")
+    if finish_reason == "length":
+        raise ModelResponseError(
+            "Vision response reached its output token limit. "
+            "Review VISION_MAX_OUTPUT_TOKENS or use a shorter document."
+        )
     if finish_reason != "stop":
         raise ModelResponseError("The model response did not finish normally.")
     if not isinstance(text, str) or not text.strip():
@@ -116,6 +121,14 @@ def validate_completion_text(
 
 def validate_agent_message(message: AIMessage) -> AIMessage:
     """Reject incomplete, refused, or empty Responses API messages."""
+    details = message.response_metadata.get("incomplete_details")
+    if isinstance(details, dict) and details.get("reason") == "max_output_tokens":
+        raise ModelResponseError(
+            "Agent response reached its output token limit. "
+            "Review the stage's CONTEXT_MAX_OUTPUT_TOKENS or "
+            "EXTRACTION_MAX_OUTPUT_TOKENS, or use a shorter document."
+        )
+
     if message.response_metadata.get("status") != "completed":
         raise ModelResponseError("The agent response did not complete.")
 
