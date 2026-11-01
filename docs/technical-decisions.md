@@ -80,13 +80,19 @@ Prompt instructions are tested through reviewed examples, including one
 case containing embedded instructions. These observations do not establish
 universal resistance to prompt injection.
 
-The evaluated fixtures primarily use partial amendments with explicit
-changes. Support for complete rewritten contracts and implicit removals
-requires additional prompt refinement and evaluation.
+The prompts distinguish partial amendments, complete revised versions,
+and uncertain scope. Missing provisions are treated as removals only when
+complete-version evidence supports that interpretation. Renumbering and
+equivalent paraphrases alone are not substantive changes.
+
+Observed failures led to explicit rules against reporting renumbering as
+a change or inferring partial scope solely from an amendment title.
+These refinements were followed by reviewed evaluations; they do not
+establish general reliability.
 
 ## Model selection
 
-- Vision: `gpt-4o`, preserving the assignment requirement recorded in the plan.
+- Vision: `gpt-4o`, preserving the assignment requirement.
 - Contextualization and extraction: `gpt-6-luna`.
 - Initial quality baseline: `gpt-6.1-sol`.
 
@@ -150,8 +156,16 @@ were manually reviewed, and the Langfuse traces and configured models
 were confirmed. See [evaluation notes](evaluation.md) for details.
 
 This final verification is separate from the preserved Sol baseline.
-Course-provided image pairs and complete rewritten contracts remain
-pending evaluation.
+Subsequent evaluation covered nine text-based cases and 29 prepared
+criteria, including complete revisions, absent provisions, uncertain scope,
+and non-substantive renumbering. All criteria passed the latest content
+review, with an unnecessary scope warning noted in the no-change map.
+
+Three course-provided image pairs were also executed. Case 1 was rerun
+after correcting an unsupported partial-scope classification.
+See [course evidence](../evaluation/course_runs/20261101/README.md)
+and [evaluation instructions](../evaluation/README.md) for provenance
+and review limitations.
 
 Results cover a small synthetic dataset. They do not prove production
 readiness, universal prompt injection resistance, or legal accuracy.

@@ -18,6 +18,10 @@ and Langfuse tracing.
 - Different amendment and original numbering.
 - An unreadable amended amount.
 - An instruction embedded in document content.
+- Complete rewritten contracts with implicit wording changes.
+- A provision absent from an explicitly complete revised version.
+- Uncertain document scope.
+- Renumbering without substantive changes.
 
 These cases isolate agent behavior from image transcription.
 They do not replace the two required image pairs.
@@ -28,9 +32,14 @@ or completeness.
 
 ## Status and execution policy
 
-The five additional semantic cases were evaluated with GPT-6 Luna using
-the refined contextualization prompt. Manual review confirmed all 13
-prepared criteria. Execution evidence is stored in `semantic_runs/`.
+The initial five-case evaluation passed its 13 prepared criteria.
+The suite was subsequently expanded to nine cases and 29 criteria.
+
+The latest reviewed run is `semantic_runs/20261101T195330479288Z/`.
+All 29 prepared criteria passed review of the contextual maps and final
+reports. The no-change map adds unnecessary scope uncertainty, although
+its alignment and final report are correct. Trace inspection for this
+semantic run remains pending.
 
 The initial image-based evaluation used GPT-4o for transcription and
 GPT-6.1 Sol for both agents. Its evidence is stored in `report.json`,
@@ -43,9 +52,14 @@ manually reviewed, and their Langfuse traces and configured models were
 confirmed. See [evaluation notes](../docs/evaluation.md) for trace IDs
 and observed durations.
 
-The three course-provided image pairs have not yet been evaluated.
-Existing results do not establish performance on complete rewritten
-contracts or implicit clause removals.
+The three course-provided image pairs were executed through the CLI.
+Their reports contain the changes listed in the course reference.
+Case 1 additionally identifies the disappearance of an express
+non-transferability restriction.
+
+Case 1 was rerun after correcting an unsupported partial-scope
+classification. Evidence and review limitations are recorded in
+[the course evaluation](course_runs/20261101/README.md).
 
 Offline tests exercise implementation behavior with simulated responses.
 Real evaluation is separate, opt-in, and consumes API usage.

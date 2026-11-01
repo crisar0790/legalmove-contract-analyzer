@@ -2,7 +2,7 @@
 
 ## Selected configuration
 
-- Vision: `gpt-4o`, preserving the requirement recorded in the project plan.
+- Vision: `gpt-4o`, preserving the assignment requirement.
 - Contextualization and extraction: `gpt-6-luna`.
 - Initial evaluation baseline: `gpt-6.1-sol`.
 - Agent reasoning effort: `low`.
@@ -63,8 +63,16 @@ pipeline with GPT-4o and GPT-6 Luna. Both final reports were manually
 reviewed, and their Langfuse traces and configured models were confirmed.
 See [evaluation notes](evaluation.md) for details.
 
-Course-provided image pairs and complete rewritten contracts remain
-pending evaluation.
+Subsequent evaluation covered nine text-based cases and 29 prepared
+criteria, including complete revisions, absent provisions, uncertain scope,
+and non-substantive renumbering. All criteria passed the latest content
+review, with an unnecessary scope warning noted in the no-change map.
+
+Three course-provided image pairs were also executed. Case 1 was rerun
+after correcting an unsupported partial-scope classification.
+See [course evidence](../evaluation/course_runs/20261101/README.md)
+and [evaluation instructions](../evaluation/README.md) for provenance
+and review limitations.
 
 ## Lifecycle constraint
 

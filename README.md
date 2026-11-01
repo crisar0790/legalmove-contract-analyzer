@@ -119,6 +119,10 @@ Agent clients use Responses API and reasoning effort `low`; this setting is
 currently supplied by the client factory rather than an environment variable.
 Agent output budgets cover reasoning and visible output tokens.
 
+Configurable model names do not imply universal model compatibility.
+The agent factory sends Responses API reasoning parameters and requires
+structured-output support. Other models may require client changes.
+
 ### Model selection
 
 The selected configuration is GPT-4o for vision and GPT-6 Luna for both agents.
@@ -128,7 +132,7 @@ refined contextualization prompt.
 
 The lifecycle documentation checked during selection lists GPT-4o as deprecated,
 with API removal scheduled for January 14, 2027. It remains configured to
-preserve the assignment requirement recorded in the project plan. Any
+preserve the assignment assignment requirement. Any
 replacement must be reconciled with that requirement.
 
 See [model selection](docs/model-selection.md) and
@@ -269,6 +273,11 @@ the trace in the dashboard to confirm delivery, hierarchy, model usage, and
 error states. If analysis and flushing both fail, the analysis error is
 preserved and the telemetry failure is logged separately.
 
+The SDK may log or suppress remote export failures without raising an
+exception to the application. A successful exit therefore does not
+guarantee telemetry delivery. Available trace IDs are logged on traced
+workflow failures; failures before trace creation have no trace ID.
+
 Untraced `analyze_contracts()` and injected pipeline components are available
 for offline tests; their trace IDs remain unset.
 
@@ -315,6 +324,19 @@ automatically approve semantic criteria; manual review remains separate.
 | Five additional text cases | GPT-6 Luna, refined context prompt | All 13 prepared criteria passed manual review |
 | Final clean-checkout image verification | GPT-4o + GPT-6 Luna | Both reports reviewed; expected sections and details confirmed; models and traces verified |
 
+Subsequent verification on November 1, 2026 passed all 187 offline tests,
+Ruff linting, and formatting checks. The latest nine-case semantic run
+passed its 29 prepared content-review criteria; its no-change map contains
+an unnecessary scope warning, while the final report is correct.
+
+The three course-provided image pairs were also executed, with case 1
+rerun after scope-classification refinement. See
+[course evidence](evaluation/course_runs/20261101/README.md) and
+[evaluation status](evaluation/README.md) for details.
+
+The earlier five-case results and clean-checkout verification below
+describe their respective historical configurations.
+
 The semantic cases cover no changes, a partial amendment, different numbering,
 an unreadable amount, and embedded document instructions. The unreadable-text
 case does not test whether vision detects a blurred image correctly.
@@ -354,7 +376,7 @@ See [evaluation notes](docs/evaluation.md),
 | `data/test_contracts/` | Four fictional images and manual references |
 | `tests/` | Offline regression tests |
 | `evaluation/` | Real evaluation scripts, reports, and intermediate evidence |
-| `outputs/examples/` | Selected actual reports; provenance is recorded in evaluation evidence |
+| `outputs/examples/` | Initial GPT-6.1 Sol image-evaluation reports |
 | `docs/` | Evaluation, model selection, and technical decisions |
 
 ## Limitations
