@@ -1,5 +1,6 @@
 """Orchestrate image transcription and specialized contract agents."""
 
+import logging
 from collections.abc import Callable
 from dataclasses import dataclass, replace
 from pathlib import Path
@@ -25,6 +26,8 @@ from src.observability import (
     tracing_session,
     update_output,
 )
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -163,34 +166,42 @@ def analyze_contracts_traced(
     *,
     settings: Settings,
 ) -> PipelineResult:
-    """Execute the workflow under one Langfuse root observation."""
-    client = build_langfuse_client(settings)
+    """Execute tracing and log the available trace ID on failure."""
+    trace_id = None
+    try:
+        client = build_langfuse_client(settings)
 
-    with tracing_session(client):
-        with observation(
-            "contract-analysis",
-            input={
-                "original": Path(original_path).name,
-                "amendment": Path(amendment_path).name,
-            },
-            metadata={
-                "vision_model": settings.vision_model,
-                "agent_model": settings.agent_model,
-                "max_retries": settings.max_retries,
-                "vision_max_output_tokens": settings.vision_max_output_tokens,
-                "context_max_output_tokens": settings.context_max_output_tokens,
-                "extraction_max_output_tokens": (settings.extraction_max_output_tokens),
-            },
-        ) as root:
-            trace_id = current_trace_id()
-            if trace_id is None:
-                raise TelemetryError("No active Langfuse trace was created.")
+        with tracing_session(client):
+            with observation(
+                "contract-analysis",
+                input={
+                    "original": Path(original_path).name,
+                    "amendment": Path(amendment_path).name,
+                },
+                metadata={
+                    "vision_model": settings.vision_model,
+                    "agent_model": settings.agent_model,
+                    "max_retries": settings.max_retries,
+                    "vision_max_output_tokens": settings.vision_max_output_tokens,
+                    "context_max_output_tokens": settings.context_max_output_tokens,
+                    "extraction_max_output_tokens": (
+                        settings.extraction_max_output_tokens
+                    ),
+                },
+            ) as root:
+                trace_id = current_trace_id()
+                if trace_id is None:
+                    raise TelemetryError("No active Langfuse trace was created.")
 
-            result = analyze_contracts(
-                original_path,
-                amendment_path,
-                settings=settings,
-                config={"callbacks": [build_callback(settings)]},
-            )
-            update_output(root, result.analysis.model_dump())
-            return replace(result, trace_id=trace_id)
+                result = analyze_contracts(
+                    original_path,
+                    amendment_path,
+                    settings=settings,
+                    config={"callbacks": [build_callback(settings)]},
+                )
+                update_output(root, result.analysis.model_dump())
+                return replace(result, trace_id=trace_id)
+    except Exception:
+        if trace_id is not None:
+            logger.error("Analysis failed. Trace ID: %s", trace_id)
+        raise
