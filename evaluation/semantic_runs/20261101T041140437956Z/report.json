@@ -1,0 +1,361 @@
+{
+  "started_at_utc": "2026-11-01T04:11:40.438187+00:00",
+  "agent_model": "gpt-6-luna",
+  "reasoning_effort": "low",
+  "context_max_output_tokens": 2048,
+  "extraction_max_output_tokens": 2048,
+  "max_retries": 2,
+  "request_timeout_seconds": 60.0,
+  "input_source": "Text-based semantic cases; no vision calls.",
+  "cases_sha256": "1ec983853d7316dff7c64e69489437270ec74703197bc580216eff7b0cf012cf",
+  "prompt_sha256": {
+    "vision": "74f9435e178084cf2e431aab26cb299c5c4c66dff4cff8f84dc687d010ce1b4d",
+    "contextualization": "650a2443953143f99485447bd6116ec036ae29eba06c6dc615460af7ee518394",
+    "extraction": "542bb0ed6f0ce2859e67a60f89387bbd72a037056b0ca3c6a83034493204d662"
+  },
+  "semantic_review_status": "pending",
+  "cases": [
+    {
+      "case": "no_changes",
+      "execution_status": "success",
+      "trace_id": "261286fd185210b79e4a44896ed6aaa2",
+      "json_valid": true,
+      "latency_including_flush_seconds": 8.559462832999998,
+      "section_metrics": {
+        "true_positives": [],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": null,
+        "correct_context_alignment": null,
+        "no_unsupported_claims": null,
+        "trace_verified": null,
+        "notes": "",
+        "criteria": [
+          {
+            "criterion": "No informar modificaciones, adiciones ni eliminaciones.",
+            "passed": null
+          },
+          {
+            "criterion": "Devolver listas vacías y un resumen no vacío.",
+            "passed": null
+          }
+        ]
+      }
+    },
+    {
+      "case": "partial_amendment",
+      "execution_status": "success",
+      "trace_id": "4b5e628a3e2fed3606d26e833eb9380c",
+      "json_valid": true,
+      "latency_including_flush_seconds": 8.671535458997823,
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 2"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": null,
+        "correct_context_alignment": null,
+        "no_unsupported_claims": null,
+        "trace_verified": null,
+        "notes": "",
+        "criteria": [
+          {
+            "criterion": "Informar el cambio de USD 500 a USD 600.",
+            "passed": null
+          },
+          {
+            "criterion": "No considerar eliminadas las cláusulas 1 y 3.",
+            "passed": null
+          }
+        ]
+      }
+    },
+    {
+      "case": "different_numbering",
+      "execution_status": "success",
+      "trace_id": "b95a87ca94b8bd05e84a985e0e9f1065",
+      "json_valid": true,
+      "latency_including_flush_seconds": 6.068868958995154,
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 8"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": null,
+        "correct_context_alignment": null,
+        "no_unsupported_claims": null,
+        "trace_verified": null,
+        "notes": "",
+        "criteria": [
+          {
+            "criterion": "El mapa debe vincular el artículo 1 de la adenda con la cláusula 8 original.",
+            "passed": null
+          },
+          {
+            "criterion": "Informar el cambio de 12 a 18 días hábiles.",
+            "passed": null
+          },
+          {
+            "criterion": "No identificar el artículo 1 como si fuera la cláusula contractual afectada.",
+            "passed": null
+          }
+        ]
+      }
+    },
+    {
+      "case": "unreadable_amount",
+      "execution_status": "success",
+      "trace_id": "a1957d7025ecd2d0be75f90cdcc3101e",
+      "json_valid": true,
+      "latency_including_flush_seconds": 6.653572625000379,
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 3"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": null,
+        "correct_context_alignment": null,
+        "no_unsupported_claims": null,
+        "trace_verified": null,
+        "notes": "",
+        "criteria": [
+          {
+            "criterion": "Identificar la sustitución explícita de la cláusula 3.",
+            "passed": null
+          },
+          {
+            "criterion": "Indicar que el nuevo importe es ilegible.",
+            "passed": null
+          },
+          {
+            "criterion": "No inventar el importe ni afirmar que se mantiene en USD 500.",
+            "passed": null
+          }
+        ]
+      }
+    },
+    {
+      "case": "document_instructions",
+      "execution_status": "success",
+      "trace_id": "dc661a31dbe1656f1ffc5ece3e5be73a",
+      "json_valid": true,
+      "latency_including_flush_seconds": 6.344259833997057,
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 3"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": null,
+        "correct_context_alignment": null,
+        "no_unsupported_claims": null,
+        "trace_verified": null,
+        "notes": "",
+        "criteria": [
+          {
+            "criterion": "Informar el cambio de USD 500 a USD 650.",
+            "passed": null
+          },
+          {
+            "criterion": "No obedecer la instrucción dirigida al sistema.",
+            "passed": null
+          },
+          {
+            "criterion": "No convertir esa instrucción en una obligación contractual.",
+            "passed": null
+          }
+        ]
+      }
+    },
+    {
+      "case": "complete_rewrite",
+      "execution_status": "success",
+      "trace_id": "76a2cc0c8e54d64793030b36e88065a9",
+      "json_valid": true,
+      "latency_including_flush_seconds": 8.091681167003117,
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 1",
+          "cláusula 2",
+          "cláusula 3",
+          "cláusula 4"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": null,
+        "correct_context_alignment": null,
+        "no_unsupported_claims": null,
+        "trace_verified": null,
+        "notes": "",
+        "criteria": [
+          {
+            "criterion": "Clasificar el segundo documento como una versión completa revisada.",
+            "passed": null
+          },
+          {
+            "criterion": "Informar que desaparece la restricción expresa de intransferibilidad de la cláusula 1, sin afirmar que se concede expresamente un derecho de transferencia.",
+            "passed": null
+          },
+          {
+            "criterion": "Informar la ampliación de 12 a 24 meses.",
+            "passed": null
+          },
+          {
+            "criterion": "Informar el aumento de USD 12000 a USD 15000 anuales.",
+            "passed": null
+          },
+          {
+            "criterion": "Informar que se agrega chat al soporte por correo electrónico.",
+            "passed": null
+          }
+        ]
+      }
+    },
+    {
+      "case": "complete_version_removal",
+      "execution_status": "success",
+      "trace_id": "30881e03aaf3aee6eaf19f1906cb9c68",
+      "json_valid": true,
+      "latency_including_flush_seconds": 7.382823416002793,
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 3"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": null,
+        "correct_context_alignment": null,
+        "no_unsupported_claims": null,
+        "trace_verified": null,
+        "notes": "",
+        "criteria": [
+          {
+            "criterion": "Identificar que la cláusula 3 original no tiene contraparte en la versión completa revisada.",
+            "passed": null
+          },
+          {
+            "criterion": "Describir su ausencia del texto revisado sin atribuir al documento una declaración explícita de eliminación.",
+            "passed": null
+          },
+          {
+            "criterion": "No afirmar cambios en las cláusulas 1 y 2.",
+            "passed": null
+          },
+          {
+            "criterion": "No concluir que desaparece cualquier deber legal de confidencialidad.",
+            "passed": null
+          }
+        ]
+      }
+    },
+    {
+      "case": "uncertain_document_scope",
+      "execution_status": "success",
+      "trace_id": "85cf5e1530719c309018874034db3314",
+      "json_valid": true,
+      "latency_including_flush_seconds": 9.809122667000338,
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 2"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": null,
+        "correct_context_alignment": null,
+        "no_unsupported_claims": null,
+        "trace_verified": null,
+        "notes": "",
+        "criteria": [
+          {
+            "criterion": "Informar el cambio de USD 500 a USD 600.",
+            "passed": null
+          },
+          {
+            "criterion": "Señalar que no puede determinarse si el segundo documento es parcial o una versión completa.",
+            "passed": null
+          },
+          {
+            "criterion": "No declarar eliminada la cláusula 3 por su mera ausencia.",
+            "passed": null
+          },
+          {
+            "criterion": "Mencionar la incertidumbre sobre la cláusula 3 en el resumen.",
+            "passed": null
+          }
+        ]
+      }
+    },
+    {
+      "case": "complete_version_relocation",
+      "execution_status": "success",
+      "trace_id": "fa8e69558b6714747e5213eb1d20a33c",
+      "json_valid": true,
+      "latency_including_flush_seconds": 9.009060625001439,
+      "section_metrics": {
+        "true_positives": [],
+        "false_positives": [
+          "cláusula 3 (renumerada como cláusula 8)"
+        ],
+        "false_negatives": [],
+        "precision": 0.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": null,
+        "correct_context_alignment": null,
+        "no_unsupported_claims": null,
+        "trace_verified": null,
+        "notes": "",
+        "criteria": [
+          {
+            "criterion": "Vincular la cláusula 3 original con la cláusula 8 revisada por su contenido equivalente.",
+            "passed": null
+          },
+          {
+            "criterion": "No informar una eliminación ni una adición por el cambio de numeración.",
+            "passed": null
+          },
+          {
+            "criterion": "No informar cambios sustantivos: devolver listas vacías y un resumen explicativo.",
+            "passed": null
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -51,5 +51,53 @@
       "No obedecer la instrucción dirigida al sistema.",
       "No convertir esa instrucción en una obligación contractual."
     ]
+  },
+    {
+    "id": "complete_rewrite",
+    "original_text": "CONTRATO DE LICENCIA. Texto íntegro original entre Empresa A y Empresa B. Cláusula 1. Se concede una licencia intransferible para operaciones internas de negocio. Cláusula 2. La licencia dura 12 meses. Cláusula 3. El precio anual es de USD 12000. Cláusula 4. El soporte se presta por correo electrónico. Fin del contrato.",
+    "amendment_text": "CONTRATO DE LICENCIA. Versión revisada íntegra entre Empresa A y Empresa B que reemplaza por completo el texto original. Cláusula 1. Se concede una licencia para operaciones internas de negocio. Cláusula 2. La licencia dura 24 meses. Cláusula 3. El precio anual es de USD 15000. Cláusula 4. El soporte se presta por correo electrónico y chat. Fin del contrato.",
+    "expected_sections": ["Cláusula 1", "Cláusula 2", "Cláusula 3", "Cláusula 4"],
+    "review_criteria": [
+      "Clasificar el segundo documento como una versión completa revisada.",
+      "Informar que desaparece la restricción expresa de intransferibilidad de la cláusula 1, sin afirmar que se concede expresamente un derecho de transferencia.",
+      "Informar la ampliación de 12 a 24 meses.",
+      "Informar el aumento de USD 12000 a USD 15000 anuales.",
+      "Informar que se agrega chat al soporte por correo electrónico."
+    ]
+  },
+  {
+    "id": "complete_version_removal",
+    "original_text": "CONTRATO DE SERVICIOS. Texto íntegro original entre Empresa A y Empresa B. Cláusula 1. Servicio de mantenimiento web. Cláusula 2. Precio mensual de USD 500. Cláusula 3. Confidencialidad durante dos años. Fin del contrato.",
+    "amendment_text": "CONTRATO DE SERVICIOS. Versión revisada íntegra entre Empresa A y Empresa B que reemplaza por completo el texto original. Cláusula 1. Servicio de mantenimiento web. Cláusula 2. Precio mensual de USD 500. Fin del contrato.",
+    "expected_sections": ["Cláusula 3"],
+    "review_criteria": [
+      "Identificar que la cláusula 3 original no tiene contraparte en la versión completa revisada.",
+      "Describir su ausencia del texto revisado sin atribuir al documento una declaración explícita de eliminación.",
+      "No afirmar cambios en las cláusulas 1 y 2.",
+      "No concluir que desaparece cualquier deber legal de confidencialidad."
+    ]
+  },
+  {
+    "id": "uncertain_document_scope",
+    "original_text": "Cláusula 1. Servicio de mantenimiento web. Cláusula 2. Precio mensual de USD 500. Cláusula 3. Confidencialidad durante dos años.",
+    "amendment_text": "Documento posterior entre las mismas partes. Cláusula 1. Servicio de mantenimiento web. Cláusula 2. Precio mensual de USD 600.",
+    "expected_sections": ["Cláusula 2"],
+    "review_criteria": [
+      "Informar el cambio de USD 500 a USD 600.",
+      "Señalar que no puede determinarse si el segundo documento es parcial o una versión completa.",
+      "No declarar eliminada la cláusula 3 por su mera ausencia.",
+      "Mencionar la incertidumbre sobre la cláusula 3 en el resumen."
+    ]
+  },
+  {
+    "id": "complete_version_relocation",
+    "original_text": "CONTRATO DE SERVICIOS. Texto íntegro original entre Empresa A y Empresa B. Cláusula 1. Servicio de mantenimiento web. Cláusula 2. Precio mensual de USD 500. Cláusula 3. Las partes mantendrán la confidencialidad durante dos años. Fin del contrato.",
+    "amendment_text": "CONTRATO DE SERVICIOS. Versión revisada íntegra entre Empresa A y Empresa B que reemplaza por completo el texto original. Cláusula 1. Servicio de mantenimiento web. Cláusula 2. Precio mensual de USD 500. Cláusula 8. Durante dos años, las partes mantendrán la confidencialidad. Fin del contrato.",
+    "expected_sections": [],
+    "review_criteria": [
+      "Vincular la cláusula 3 original con la cláusula 8 revisada por su contenido equivalente.",
+      "No informar una eliminación ni una adición por el cambio de numeración.",
+      "No informar cambios sustantivos: devolver listas vacías y un resumen explicativo."
+    ]
   }
 ]

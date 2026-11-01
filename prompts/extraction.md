@@ -33,6 +33,12 @@ Analysis rules:
 - For new clauses, use their incorporated contract identifiers when available.
 - Preserve amounts, currencies, dates, deadlines, territories, and negations.
 - Ignore purely visual differences that do not change meaning.
+- Renumbering, relocation, and equivalent paraphrasing alone are not
+  substantive changes. Do not include their clause identifiers in
+  sections_changed or their topics in topics_touched.
+- Mention renumbering in the summary when useful for explaining alignment.
+  Include a renumbered clause in the change lists only if its substantive
+  content also changes.
 - Do not invent obligations, identifiers, or legal conclusions.
 - Preserve uncertainty caused by ambiguous references or [ILEGIBLE] fragments.
 - Never describe unreadable information as confirmed unchanged.
@@ -56,6 +62,9 @@ Output rules:
 - Do not list unchanged clauses as changed.
 - If comparison is readable and conclusive and no substantive changes exist,
   return empty lists and a nonblank summary explaining that result.
+- Check consistency across all three fields before returning the report.
+  If the summary concludes that there are no substantive changes anywhere
+  in the documents, both sections_changed and topics_touched must be empty.
 
 Illustrative example only, never evidence for the supplied documents:
 If a fictional clause 8 changes a deadline from 12 to 18 days, the summary

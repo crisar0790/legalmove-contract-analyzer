@@ -1,0 +1,15 @@
+{
+  "sections_changed": [
+    "Cláusula 1",
+    "Cláusula 2",
+    "Cláusula 3",
+    "Cláusula 4"
+  ],
+  "topics_touched": [
+    "Restricciones de uso",
+    "Duración de la licencia",
+    "Precio",
+    "Soporte técnico"
+  ],
+  "summary_of_the_change": "La segunda versión se identifica como íntegra y reemplaza por completo el texto original. En la cláusula 1, la licencia deja de calificarse expresamente como intransferible; se mantiene su uso para operaciones internas de negocio. En la cláusula 2, la duración pasa de 12 a 24 meses. En la cláusula 3, el precio anual pasa de USD 12000 a USD 15000. En la cláusula 4, el soporte pasa de prestarse por correo electrónico a prestarse por correo electrónico y chat."
+}
