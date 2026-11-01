@@ -57,8 +57,17 @@ Image-based baseline evidence is stored in `evaluation/runs/` and
 `evaluation/comparisons/`; text-based edge cases are in
 `evaluation/semantic_runs/`.
 
-The baseline image evaluation used Sol. Luna's candidate evaluations used
+The baseline image evaluation used Sol. Luna's candidate comparisons used
 reviewed transcriptions and did not rerun vision.
+
+A subsequent clean-checkout verification ran both synthetic image pairs
+through vision and both agents using GPT-4o and GPT-6 Luna. Both reports
+were manually reviewed, and the Langfuse traces and configured models
+were confirmed. See [evaluation notes](evaluation.md) for details.
+
+This final verification is separate from the preserved Sol baseline.
+Course-provided image pairs and complete rewritten contracts remain
+pending evaluation.
 
 Results cover a small synthetic dataset. They do not prove production
 readiness, universal prompt injection resistance, or legal accuracy.

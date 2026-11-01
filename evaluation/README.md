@@ -28,8 +28,24 @@ or completeness.
 
 ## Status and execution policy
 
-The additional semantic cases are prepared but not yet evaluated.
-No passing results or quality metrics are claimed for them.
+The five additional semantic cases were evaluated with GPT-6 Luna using
+the refined contextualization prompt. Manual review confirmed all 13
+prepared criteria. Execution evidence is stored in `semantic_runs/`.
+
+The initial image-based evaluation used GPT-4o for transcription and
+GPT-6.1 Sol for both agents. Its evidence is stored in `report.json`,
+`runs/`, and `../outputs/examples/`. These artifacts represent the initial
+baseline, not the final GPT-6 Luna configuration.
+
+A subsequent clean-checkout verification ran both image pairs through
+the complete CLI pipeline using GPT-4o and GPT-6 Luna. Both reports were
+manually reviewed, and their Langfuse traces and configured models were
+confirmed. See [evaluation notes](../docs/evaluation.md) for trace IDs
+and observed durations.
+
+The three course-provided image pairs have not yet been evaluated.
+Existing results do not establish performance on complete rewritten
+contracts or implicit clause removals.
 
 Offline tests exercise implementation behavior with simulated responses.
 Real evaluation is separate, opt-in, and consumes API usage.

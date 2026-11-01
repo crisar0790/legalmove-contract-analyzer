@@ -57,8 +57,14 @@ general accuracy, legal reliability, or complete prompt injection resistance.
 Sol was not evaluated on the five additional semantic cases. The revised
 contextualization prompt was not benchmarked across both models.
 
-Luna's candidate evaluations used reviewed text. Final delivery verification
-must also run the complete image pipeline with the selected configuration.
+Luna's candidate evaluations used reviewed text. A subsequent verification
+from a clean checkout ran both synthetic image pairs through the complete
+pipeline with GPT-4o and GPT-6 Luna. Both final reports were manually
+reviewed, and their Langfuse traces and configured models were confirmed.
+See [evaluation notes](evaluation.md) for details.
+
+Course-provided image pairs and complete rewritten contracts remain
+pending evaluation.
 
 ## Lifecycle constraint
 
