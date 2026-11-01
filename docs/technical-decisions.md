@@ -1,5 +1,89 @@
 # Technical decisions
 
+## Two-stage agent design
+
+Contract comparison involves two distinct responsibilities: aligning
+document sections and extracting substantive changes.
+
+ContextualizationAgent inventories both documents and maps their sections.
+This makes numbering differences, unmatched sections, collective
+ratifications, and ambiguous references visible before extraction.
+
+ExtractionAgent receives both complete transcriptions and the contextual
+map. It checks the proposed correspondences against the source texts and
+produces the three-field report through structured output.
+
+Keeping these responsibilities separate makes failures easier to inspect:
+a reviewer can distinguish transcription errors, alignment errors, and
+extraction errors. It also allows each stage to have its own prompt and
+output budget.
+
+The contextual map is an auxiliary interpretation, not an authoritative
+source. Supplying both original texts to the extractor reduces dependence
+on an incomplete or incorrect map, but does not eliminate error propagation.
+
+The implementation uses sequential LangChain chains with a fixed handoff.
+It does not implement autonomous planning or tool selection. No controlled
+single-agent comparison was performed, so the two-stage design is justified
+by separation of responsibilities and inspectability rather than a measured
+accuracy improvement.
+
+## System prompt design
+
+The prompts are maintained as separate versioned files so their roles,
+constraints, and changes can be reviewed independently of application code.
+
+### Vision transcription
+
+The vision prompt requests faithful transcription rather than comparison.
+It emphasizes numbering, amounts, dates, currencies, and negations because
+errors in these details can change the meaning of a contractual provision.
+
+Unreadable fragments are marked as [ILEGIBLE] instead of being completed
+from context. Document content is treated as data, including text that
+resembles instructions to the model.
+
+### Contextualization
+
+The contextualization prompt assigns an alignment role and requires fixed
+headings for document inventories, correspondences, unmatched sections,
+and ambiguities. This produces an intermediate artifact that a reviewer
+can inspect.
+
+It distinguishes amendment numbering from original clause identifiers and
+prevents omission from a partial amendment from being treated automatically
+as deletion.
+
+The prompt was refined after an observed ratification error: a collective
+reference to unchanged clauses must exclude provisions explicitly modified,
+replaced, or deleted by the amendment.
+
+### Extraction
+
+The extraction prompt assigns an auditing role and requires findings to be
+supported by the source documents. It instructs the agent to verify the
+contextual map, review unmatched sections, preserve material uncertainty,
+and distinguish substantive changes from visual differences.
+
+The system prompt defines the semantic requirements. The structured-output
+schema defines the required fields and types, while Pydantic validates the
+returned structure. These mechanisms complement each other; schema
+validation does not establish factual correctness.
+
+### Evaluation boundaries
+
+The prompts request Spanish maps and reports while preserving the source
+language during transcription. Illustrative findings are explicitly marked
+as examples rather than evidence for the supplied documents.
+
+Prompt instructions are tested through reviewed examples, including one
+case containing embedded instructions. These observations do not establish
+universal resistance to prompt injection.
+
+The evaluated fixtures primarily use partial amendments with explicit
+changes. Support for complete rewritten contracts and implicit removals
+requires additional prompt refinement and evaluation.
+
 ## Model selection
 
 - Vision: `gpt-4o`, preserving the assignment requirement recorded in the plan.

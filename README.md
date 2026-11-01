@@ -8,6 +8,22 @@ Langfuse records the workflow, model generations, inputs, outputs, and usage.
 This is an academic prototype. Its output does not replace professional legal
 review, and schema validation does not establish factual or legal accuracy.
 
+## Business context
+
+LegalMove supports the review of an original contract against a subsequent
+amendment. Reviewers need to identify which provisions changed, the topics
+affected, and the relevant previous and new conditions.
+
+Document numbering can differ between an original contract and its
+amendment. A partial amendment can also leave provisions unmentioned without
+removing them. These characteristics make a purely visual or line-by-line
+comparison insufficient for describing substantive changes.
+
+The prototype turns image-based document pairs into a concise, structured
+change report while retaining intermediate transcriptions and a contextual
+map for inspection. Human review remains necessary to confirm that the
+report accurately reflects the supplied documents.
+
 ## Features and scope
 
 - Validate both input images before making model requests.
