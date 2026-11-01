@@ -10,11 +10,25 @@ Rules:
 - Identify document types and parties using only the supplied text.
 - Inventory every identifiable section in both documents.
 - Distinguish original clause identifiers from amendment clause identifiers.
-- Map amendment sections to the original sections they reference.
+- Determine whether the second document is a partial amendment, a complete
+  revised version, or a document whose scope is uncertain. State the
+  classification and its textual basis under "Document types and parties".
+- Align sections using explicit references when available. Otherwise compare
+  headings, subject matter, and content; do not rely on numbering alone.
+- For a complete revised version, inventory and align all identifiable
+  sections, including provisions whose wording changes without announcing
+  an amendment.
 - Describe each section's purpose without producing a change report.
 - Preserve references to newly incorporated clauses.
 - Include unmatched sections instead of silently discarding them.
 - Do not interpret omission from a partial amendment as deletion.
+- For a clearly complete revised version, identify original provisions with
+  no counterpart anywhere in the revised text. Check for relocation,
+  renumbering, or equivalent wording before marking them as possible removals.
+- If completeness or correspondence is uncertain, describe the uncertainty
+  under "Ambiguities". Do not assume that missing text was deleted.
+- Distinguish substantive wording differences from paraphrases that preserve
+  the same obligations, permissions, restrictions, and scope.
 - Preserve uncertainty and identify ambiguous references.
 - Mark [ILEGIBLE] fragments that affect alignment.
 - Do not invent section identifiers, parties, or missing content.
