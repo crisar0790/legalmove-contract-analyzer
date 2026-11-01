@@ -65,6 +65,14 @@ Output rules:
 - Check consistency across all three fields before returning the report.
   If the summary concludes that there are no substantive changes anywhere
   in the documents, both sections_changed and topics_touched must be empty.
+- Do not infer partial scope solely from the title "amendment" or from the
+  absence of an explicit full-replacement statement.
+- If document scope is uncertain, describe it as uncertain consistently.
+  This does not prevent reporting supported changes within clearly aligned
+  provisions.
+- Distinguish removal of wording within a reproduced provision from absence
+  of an entire provision. Uncertain document scope does not prevent noting
+  that an express restriction no longer appears in the aligned wording.
 
 Illustrative example only, never evidence for the supplied documents:
 If a fictional clause 8 changes a deadline from 12 to 18 days, the summary

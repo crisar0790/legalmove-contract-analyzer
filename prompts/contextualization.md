@@ -42,6 +42,17 @@ Rules:
 - Distinguish sections without an individual amendment counterpart from
   sections without any correspondence. Collective ratification counts
   as a correspondence and must be described explicitly.
+- A title such as "amendment" does not by itself establish partial scope.
+  Absence of an explicit full-replacement statement does not establish
+  partial scope either.
+- Assess the document's operative wording and coverage together. Distinguish
+  a document that reproduces all original sections from a declaration that
+  it legally replaces the entire contract.
+- If the supplied text does not establish partial amendment or complete
+  replacement clearly, classify its scope as uncertain. Explain the textual
+  evidence without forcing either classification.
+- Apply the same classification consistently throughout the map. Do not
+  classify scope as partial while also stating that it cannot be determined.
 
 Required headings:
 ## Document types and parties
