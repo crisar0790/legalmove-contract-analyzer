@@ -30,8 +30,8 @@ report accurately reflects the supplied documents.
 - Preserve clause numbering, amounts, dates, currencies, and negations during
   transcription; mark unreadable fragments as `[ILEGIBLE]`.
 - Map original and amendment sections with `ContextualizationAgent`.
-- Identify supported modifications, additions, and explicit deletions with
-  `ExtractionAgent`.
+- Identify substantive modifications, additions, explicit deletions, and
+  supported absences from clearly complete revised versions.
 - Export exactly three required fields as validated JSON.
 - Trace successful workflows and failures under one Langfuse root.
 - Run offline regression tests and separate, opt-in API evaluations.
@@ -76,6 +76,7 @@ fails. The pipeline does not retry the entire workflow.
 From a local checkout of this repository:
 
 ```bash
+git clone https://github.com/crisar0790/legalmove-contract-analyzer.git
 cd legalmove-contract-analyzer
 python3.12 -m venv .venv
 source .venv/bin/activate
@@ -132,7 +133,7 @@ refined contextualization prompt.
 
 The lifecycle documentation checked during selection lists GPT-4o as deprecated,
 with API removal scheduled for January 14, 2027. It remains configured to
-preserve the assignment assignment requirement. Any
+preserve the assignment requirement. Any
 replacement must be reconciled with that requirement.
 
 See [model selection](docs/model-selection.md) and
@@ -204,7 +205,7 @@ Real analysis consumes OpenAI API usage and sends telemetry to Langfuse.
 
 | Field | Type | Meaning |
 | --- | --- | --- |
-| `sections_changed` | `list[str]` | Modified, added, or explicitly deleted clause identifiers |
+| `sections_changed` | `list[str]` | Identifiers of substantively modified, added, explicitly deleted, or conclusively absent provisions in a clearly complete revised version |
 | `topics_touched` | `list[str]` | Topics affected by the changes |
 | `summary_of_the_change` | `str` | Supported changes, relevant previous/new values, and material uncertainty |
 
@@ -337,11 +338,12 @@ rerun after scope-classification refinement. See
 The earlier five-case results and clean-checkout verification below
 describe their respective historical configurations.
 
-The semantic cases cover no changes, a partial amendment, different numbering,
-an unreadable amount, and embedded document instructions. The unreadable-text
-case does not test whether vision detects a blurred image correctly.
+The nine semantic cases cover no changes, partial amendments, different
+numbering, an unreadable amount, embedded instructions, complete rewrites,
+absent provisions, uncertain scope, and non-substantive renumbering.
+Text-based cases do not evaluate image transcription quality.
 
-Final end-to-end verification was completed from a clean checkout on
+The October 31 end-to-end verification was completed from a clean checkout on
 October 31, 2026, using GPT-4o for vision and GPT-6 Luna for both agents.
 Both image pairs produced manually reviewed reports with the expected
 sections and change details. Both Langfuse traces were inspected, including

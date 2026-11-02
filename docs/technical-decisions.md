@@ -134,6 +134,27 @@ bounds, not globally optimized settings.
 No temperature value is explicitly configured. No automatic output repair
 is performed.
 
+## Why GPT-4o for transcription
+
+GPT-4o is used as the image-input stage required by the assignment.
+Its role is to transcribe the supplied document directly from the image,
+preserving clause structure, numbering, amounts, dates, and negations.
+
+Using one multimodal transcription stage avoids introducing a separate
+OCR engine and its configuration into this prototype. This reduces the
+number of components, but does not eliminate transcription errors.
+
+The transcription prompt separates faithful reading from downstream
+interpretation. Both agents receive the resulting source texts, while
+unreadable fragments must remain explicitly uncertain.
+
+The initial four synthetic-image transcriptions were manually checked
+against their references. That evidence supports those fixtures only.
+No comparative benchmark of vision models was performed, so GPT-4o is
+not claimed to be the most accurate or cheapest available option.
+
+The model lifecycle constraint is documented separately below.
+
 ## Vision lifecycle
 
 GPT-4o is deprecated, with API removal scheduled for January 14, 2027,

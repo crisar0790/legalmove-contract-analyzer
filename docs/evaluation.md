@@ -50,7 +50,7 @@ general accuracy. Blurred scans, handwriting, and longer documents remain
 untested. The unreadable-amount text case does not evaluate vision on a
 blurred image.
 
-## Final clean-checkout verification
+## October 31 clean-checkout verification
 
 On October 31, 2026, a fresh repository clone was installed with Python
 3.12.14 and the pinned development requirements.

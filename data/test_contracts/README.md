@@ -62,3 +62,13 @@ python -m src.main \
   data/test_contracts/complex_original.png \
   data/test_contracts/complex_amendment.png \
   --output outputs/complex.json
+```
+
+These commands consume OpenAI API usage and send traces to Langfuse.
+
+The CLI also accepts other JPEG and PNG image paths. Each input represents
+one image; PDF ingestion and multi-page assembly are not implemented.
+
+These fictional fixtures use partial amendments. Separate evaluations
+cover complete revised versions and uncertain document scope.
+See [evaluation instructions](../../evaluation/README.md).

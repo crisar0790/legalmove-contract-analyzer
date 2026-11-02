@@ -28,9 +28,11 @@ expected-differences document.
 Cases 2 and 3 contain the changes listed in the course reference.
 They were executed before the final scope-classification refinement.
 
-Trace screenshots confirm remote trace presence and the visible workflow
-stages. They do not establish complete transcription fidelity or verification
-of every generation's model metadata.
+Trace screenshots were inspected during review but are not included in
+this repository. They showed remote trace presence and visible workflow
+stages. This is a review observation, not a versioned screenshot artifact.
+Complete transcription fidelity and every generation's model metadata
+were not independently verified.
 
 Durations are individual observations, not benchmark averages.
 These results do not establish general accuracy on arbitrary contracts.
