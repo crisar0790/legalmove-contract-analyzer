@@ -9,7 +9,14 @@ class ContractChangeOutput(BaseModel):
     model_config = ConfigDict(strict=True, extra="forbid")
 
     sections_changed: list[str] = Field(
-        description=("Identifiers of modified, added, or explicitly deleted sections.")
+        description=(
+            "Identifiers of substantively modified or added sections, "
+            "explicitly deleted sections, or original sections conclusively "
+            "absent from a clearly complete revised version. "
+            "Omission from a partial or uncertain-scope amendment is not "
+            "sufficient evidence of deletion. Renumbering alone is not "
+            "a substantive change."
+        )
     )
     topics_touched: list[str] = Field(
         description="Legal or commercial topics affected by the changes."

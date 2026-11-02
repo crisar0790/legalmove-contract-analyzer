@@ -203,5 +203,5 @@ def analyze_contracts_traced(
                 return replace(result, trace_id=trace_id)
     except Exception:
         if trace_id is not None:
-            logger.error("Analysis failed. Trace ID: %s", trace_id)
+            logger.error("Traced workflow failed. Trace ID: %s", trace_id)
         raise
