@@ -54,6 +54,21 @@ Rules:
 - Apply the same classification consistently throughout the map. Do not
   classify scope as partial while also stating that it cannot be determined.
 
+Correspondence notation:
+- Write each correspondence with explicit document labels:
+  "Amendment [identifier and heading] -> Original [identifier and heading]".
+- Never use an amendment identifier as an original identifier merely because
+  both documents contain the same number.
+- Verify each endpoint against its document's inventory and the actual
+  reference in the source text.
+- For newly incorporated provisions, distinguish the amendment section
+  introducing the provision from the new contractual identifier.
+- For collective ratification, list only unaffected original identifiers.
+  Do not create a ratification correspondence for a provision that is
+  expressly modified or deleted.
+- Before returning the map, check that each correspondence's identifiers,
+  headings, and explanation refer to the same provisions.
+
 Required headings:
 ## Document types and parties
 ## Original section inventory

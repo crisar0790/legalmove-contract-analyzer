@@ -1,0 +1,11 @@
+{
+  "source_directory": "evaluation/delivery_runs/20261102T014124453477Z/complex",
+  "original_text_sha256": "6819ed5769e19b7a11943066904b4f439a7f529cd21389ab159553d99a2f2b66",
+  "amendment_text_sha256": "f11391600a56037c55c1c0eaf2e36b34d1d554e4c8a21f0f86bba2062f0036a9",
+  "context_prompt_sha256": "029b14d3be9aae4830e70f17487214962f6d77116e0d04435a8503e827284982",
+  "agent_model": "gpt-6-luna",
+  "trace_id": "741ecd58b3c527d6714143e836baf766",
+  "content_review": "passed",
+  "trace_verified": null,
+  "review_notes": "Reviewed amendment-to-original correspondences, the new contractual clause, and collective ratification exclusions. This evaluation covers contextualization only."
+}
