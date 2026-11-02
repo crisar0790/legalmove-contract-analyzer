@@ -54,7 +54,7 @@ def test_passes_both_documents_and_map_to_structured_model(report):
 
     assert result is report
     model.with_structured_output.assert_called_once_with(
-        ContractChangeOutput,
+        ContractChangeOutput.model_json_schema(),
         method="json_schema",
         strict=True,
         include_raw=True,

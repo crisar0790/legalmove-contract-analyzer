@@ -35,10 +35,18 @@ def validate_extraction_response(response: object) -> ContractChangeOutput:
         ) from None
 
     parsed = response["parsed"]
-    if not isinstance(parsed, ContractChangeOutput):
+    if isinstance(parsed, ContractChangeOutput):
+        return parsed
+
+    if not isinstance(parsed, dict):
         raise ModelResponseError("The model returned no validated report.")
 
-    return parsed
+    try:
+        return ContractChangeOutput.model_validate(parsed)
+    except ValidationError:
+        raise ModelResponseError(
+            "The extracted report failed structured output validation."
+        ) from None
 
 
 class ExtractionAgent:
@@ -63,7 +71,7 @@ class ExtractionAgent:
             ]
         )
         structured_model = model.with_structured_output(
-            ContractChangeOutput,
+            ContractChangeOutput.model_json_schema(),
             method="json_schema",
             strict=True,
             include_raw=True,
