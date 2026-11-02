@@ -72,3 +72,31 @@ Each inspected trace contained two vision generations and one generation
 per agent. Durations are individual observations, not benchmark averages.
 This verification supports these two fixtures and does not establish
 accuracy on arbitrary contracts.
+
+## Latest delivery review and targeted correction
+
+The five-pair image run is stored in
+`evaluation/delivery_runs/20261102T014124453477Z/`.
+
+All five final reports contain the expected changes. However, the complex
+case's contextual map confused original and amendment identifiers.
+Its alignment review failed, even though the final extraction was correct.
+
+The nine-case text run in
+`evaluation/semantic_runs/20261102T014319637924Z/`
+passed all 29 prepared criteria. An unnecessary scope warning remains
+noted in the no-change case.
+
+A subsequent contextualization prompt refinement introduced explicit
+document labels and endpoint checks. The targeted complex-case rerun in
+`evaluation/alignment_runs/20261102T014904054973Z/`
+produced the correct correspondences and ratification exclusions.
+
+That targeted rerun evaluated contextualization only, using saved
+transcriptions. The full image pipeline and nine-case suite were not rerun
+after this last prompt change. Earlier results remain evidence for their
+recorded configurations.
+
+Full visual transcription fidelity and remote trace inspection remain
+pending for the latest delivery runs. Input hashes and trace IDs alone
+do not establish either verification.

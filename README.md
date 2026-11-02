@@ -318,6 +318,11 @@ automatically approve semantic criteria; manual review remains separate.
 
 ### Reviewed evidence
 
+For the latest delivery findings, the complex-case alignment failure,
+and its targeted correction, see
+[the evaluation review](docs/evaluation.md#latest-delivery-review-and-targeted-correction).
+Historical runs do not constitute a full regression of the latest prompt.
+
 | Evaluation | Configuration | Observed result |
 | --- | --- | --- |
 | Two image pairs | GPT-4o + GPT-6.1 Sol | Correct sections, nine expected facts, faithful transcriptions |

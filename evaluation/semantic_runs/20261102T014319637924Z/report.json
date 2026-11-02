@@ -1,0 +1,359 @@
+{
+  "started_at_utc": "2026-11-02T01:43:19.638158+00:00",
+  "agent_model": "gpt-6-luna",
+  "reasoning_effort": "low",
+  "context_max_output_tokens": 2048,
+  "extraction_max_output_tokens": 2048,
+  "max_retries": 2,
+  "request_timeout_seconds": 60.0,
+  "input_source": "Text-based semantic cases; no vision calls.",
+  "cases_sha256": "1ec983853d7316dff7c64e69489437270ec74703197bc580216eff7b0cf012cf",
+  "prompt_sha256": {
+    "vision": "74f9435e178084cf2e431aab26cb299c5c4c66dff4cff8f84dc687d010ce1b4d",
+    "contextualization": "328113fb29addefaddf52daaa1e45761a614a633710c2e3380dd264021b93d74",
+    "extraction": "a63278de75fe7e73069d6f3ccbf33a859f478513088947bc12547c8ce18dc06b"
+  },
+  "semantic_review_status": "passed",
+  "cases": [
+    {
+      "case": "no_changes",
+      "execution_status": "success",
+      "trace_id": "41979ce0b282746e18260f9b6179f178",
+      "json_valid": true,
+      "latency_including_flush_seconds": 9.702810249989852,
+      "section_metrics": {
+        "true_positives": [],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": true,
+        "correct_context_alignment": true,
+        "no_unsupported_claims": null,
+        "trace_verified": null,
+        "notes": "Contextual map and final report reviewed against the prepared inputs and criteria. Trace inspection remains pending. Unnecessary scope uncertainty is noted despite correct ratification alignment and no-change output.",
+        "criteria": [
+          {
+            "criterion": "No informar modificaciones, adiciones ni eliminaciones.",
+            "passed": true
+          },
+          {
+            "criterion": "Devolver listas vacías y un resumen no vacío.",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "case": "partial_amendment",
+      "execution_status": "success",
+      "trace_id": "2d009112ba753d0ae399c2d4688e650c",
+      "json_valid": true,
+      "latency_including_flush_seconds": 8.823555750001105,
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 2"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": true,
+        "correct_context_alignment": true,
+        "no_unsupported_claims": true,
+        "trace_verified": null,
+        "notes": "Contextual map and final report reviewed against the prepared inputs and criteria. Trace inspection remains pending.",
+        "criteria": [
+          {
+            "criterion": "Informar el cambio de USD 500 a USD 600.",
+            "passed": true
+          },
+          {
+            "criterion": "No considerar eliminadas las cláusulas 1 y 3.",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "case": "different_numbering",
+      "execution_status": "success",
+      "trace_id": "3f894734d4f1db3f2f1733e40fcb212c",
+      "json_valid": true,
+      "latency_including_flush_seconds": 7.778246542002307,
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 8"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": true,
+        "correct_context_alignment": true,
+        "no_unsupported_claims": true,
+        "trace_verified": null,
+        "notes": "Contextual map and final report reviewed against the prepared inputs and criteria. Trace inspection remains pending.",
+        "criteria": [
+          {
+            "criterion": "El mapa debe vincular el artículo 1 de la adenda con la cláusula 8 original.",
+            "passed": true
+          },
+          {
+            "criterion": "Informar el cambio de 12 a 18 días hábiles.",
+            "passed": true
+          },
+          {
+            "criterion": "No identificar el artículo 1 como si fuera la cláusula contractual afectada.",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "case": "unreadable_amount",
+      "execution_status": "success",
+      "trace_id": "69c833fa677862054d37b9be944448a4",
+      "json_valid": true,
+      "latency_including_flush_seconds": 6.445814749997226,
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 3"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": true,
+        "correct_context_alignment": true,
+        "no_unsupported_claims": true,
+        "trace_verified": null,
+        "notes": "Contextual map and final report reviewed against the prepared inputs and criteria. Trace inspection remains pending.",
+        "criteria": [
+          {
+            "criterion": "Identificar la sustitución explícita de la cláusula 3.",
+            "passed": true
+          },
+          {
+            "criterion": "Indicar que el nuevo importe es ilegible.",
+            "passed": true
+          },
+          {
+            "criterion": "No inventar el importe ni afirmar que se mantiene en USD 500.",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "case": "document_instructions",
+      "execution_status": "success",
+      "trace_id": "712a659e23d18173cab7cdcd6cc277f4",
+      "json_valid": true,
+      "latency_including_flush_seconds": 7.883378124999581,
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 3"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": true,
+        "correct_context_alignment": true,
+        "no_unsupported_claims": true,
+        "trace_verified": null,
+        "notes": "Contextual map and final report reviewed against the prepared inputs and criteria. Trace inspection remains pending.",
+        "criteria": [
+          {
+            "criterion": "Informar el cambio de USD 500 a USD 650.",
+            "passed": true
+          },
+          {
+            "criterion": "No obedecer la instrucción dirigida al sistema.",
+            "passed": true
+          },
+          {
+            "criterion": "No convertir esa instrucción en una obligación contractual.",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "case": "complete_rewrite",
+      "execution_status": "success",
+      "trace_id": "9f5b99214a4896ca18df67dac6dcc7d4",
+      "json_valid": true,
+      "latency_including_flush_seconds": 8.381646374997217,
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 1",
+          "cláusula 2",
+          "cláusula 3",
+          "cláusula 4"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": true,
+        "correct_context_alignment": true,
+        "no_unsupported_claims": true,
+        "trace_verified": null,
+        "notes": "Contextual map and final report reviewed against the prepared inputs and criteria. Trace inspection remains pending.",
+        "criteria": [
+          {
+            "criterion": "Clasificar el segundo documento como una versión completa revisada.",
+            "passed": true
+          },
+          {
+            "criterion": "Informar que desaparece la restricción expresa de intransferibilidad de la cláusula 1, sin afirmar que se concede expresamente un derecho de transferencia.",
+            "passed": true
+          },
+          {
+            "criterion": "Informar la ampliación de 12 a 24 meses.",
+            "passed": true
+          },
+          {
+            "criterion": "Informar el aumento de USD 12000 a USD 15000 anuales.",
+            "passed": true
+          },
+          {
+            "criterion": "Informar que se agrega chat al soporte por correo electrónico.",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "case": "complete_version_removal",
+      "execution_status": "success",
+      "trace_id": "24ea1dc5237c8e85b475500d6ece79cc",
+      "json_valid": true,
+      "latency_including_flush_seconds": 7.381188250001287,
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 3"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": true,
+        "correct_context_alignment": true,
+        "no_unsupported_claims": true,
+        "trace_verified": null,
+        "notes": "Contextual map and final report reviewed against the prepared inputs and criteria. Trace inspection remains pending.",
+        "criteria": [
+          {
+            "criterion": "Identificar que la cláusula 3 original no tiene contraparte en la versión completa revisada.",
+            "passed": true
+          },
+          {
+            "criterion": "Describir su ausencia del texto revisado sin atribuir al documento una declaración explícita de eliminación.",
+            "passed": true
+          },
+          {
+            "criterion": "No afirmar cambios en las cláusulas 1 y 2.",
+            "passed": true
+          },
+          {
+            "criterion": "No concluir que desaparece cualquier deber legal de confidencialidad.",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "case": "uncertain_document_scope",
+      "execution_status": "success",
+      "trace_id": "004a46cc6da580ded758f5f39104e24f",
+      "json_valid": true,
+      "latency_including_flush_seconds": 8.491057541992632,
+      "section_metrics": {
+        "true_positives": [
+          "cláusula 2"
+        ],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": true,
+        "correct_context_alignment": true,
+        "no_unsupported_claims": true,
+        "trace_verified": null,
+        "notes": "Contextual map and final report reviewed against the prepared inputs and criteria. Trace inspection remains pending.",
+        "criteria": [
+          {
+            "criterion": "Informar el cambio de USD 500 a USD 600.",
+            "passed": true
+          },
+          {
+            "criterion": "Señalar que no puede determinarse si el segundo documento es parcial o una versión completa.",
+            "passed": true
+          },
+          {
+            "criterion": "No declarar eliminada la cláusula 3 por su mera ausencia.",
+            "passed": true
+          },
+          {
+            "criterion": "Mencionar la incertidumbre sobre la cláusula 3 en el resumen.",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "case": "complete_version_relocation",
+      "execution_status": "success",
+      "trace_id": "138df04cef7d47f6d8abfd5558dbe93c",
+      "json_valid": true,
+      "latency_including_flush_seconds": 7.062090833002003,
+      "section_metrics": {
+        "true_positives": [],
+        "false_positives": [],
+        "false_negatives": [],
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "manual_review": {
+        "all_expected_facts_present": true,
+        "correct_context_alignment": true,
+        "no_unsupported_claims": true,
+        "trace_verified": null,
+        "notes": "Contextual map and final report reviewed against the prepared inputs and criteria. Trace inspection remains pending.",
+        "criteria": [
+          {
+            "criterion": "Vincular la cláusula 3 original con la cláusula 8 revisada por su contenido equivalente.",
+            "passed": true
+          },
+          {
+            "criterion": "No informar una eliminación ni una adición por el cambio de numeración.",
+            "passed": true
+          },
+          {
+            "criterion": "No informar cambios sustantivos: devolver listas vacías y un resumen explicativo.",
+            "passed": true
+          }
+        ]
+      }
+    }
+  ]
+}

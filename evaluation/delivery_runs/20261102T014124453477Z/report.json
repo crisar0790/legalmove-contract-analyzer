@@ -1,0 +1,92 @@
+{
+  "started_at_utc": "2026-11-02T01:41:24.454264+00:00",
+  "source_commit": "36ddadf975e14a722316dd31d0e3c8ea4d39747b",
+  "working_tree_clean": false,
+  "vision_model": "gpt-4o",
+  "agent_model": "gpt-6-luna",
+  "reasoning_effort": "low",
+  "vision_max_output_tokens": 4096,
+  "context_max_output_tokens": 2048,
+  "extraction_max_output_tokens": 2048,
+  "request_timeout_seconds": 60.0,
+  "max_retries": 2,
+  "prompt_sha256": {
+    "contextualization.md": "328113fb29addefaddf52daaa1e45761a614a633710c2e3380dd264021b93d74",
+    "extraction.md": "a63278de75fe7e73069d6f3ccbf33a859f478513088947bc12547c8ce18dc06b",
+    "vision.md": "74f9435e178084cf2e431aab26cb299c5c4c66dff4cff8f84dc687d010ce1b4d"
+  },
+  "semantic_review_status": "partial",
+  "cases": [
+    {
+      "case": "simple",
+      "input_sha256": {
+        "data/test_contracts/simple_original.png": "b5ad6fc3865d388ad2f336d23393d5b4aa90955e0c882efeb99359b70bb4bc9b",
+        "data/test_contracts/simple_amendment.png": "e970473157f017f64117e3ee8f826d22c0e1b79b2d3113829ba524463438b921"
+      },
+      "content_review": "passed",
+      "trace_verified": null,
+      "execution_status": "success",
+      "trace_id": "9b981fb0214b05e605b45cf1b3658433",
+      "final_report_review": "passed",
+      "context_alignment_review": "passed",
+      "visual_transcription_review": "pending"
+    },
+    {
+      "case": "complex",
+      "input_sha256": {
+        "data/test_contracts/complex_original.png": "d0b4870023c467e8f0c10e2fadde9e7f4b1a3c643d3b90e4c25accccf4aaf21f",
+        "data/test_contracts/complex_amendment.png": "f49ce3f2e0507371e89bee3d0d097ed041d01be633606aeb6bd70b8ae6fc1273"
+      },
+      "content_review": "partial",
+      "trace_verified": null,
+      "execution_status": "success",
+      "trace_id": "aae431e07c7b748672a17f767a58b338",
+      "final_report_review": "passed",
+      "context_alignment_review": "failed",
+      "visual_transcription_review": "pending"
+    },
+    {
+      "case": "course_1",
+      "input_sha256": {
+        "data/course_contracts/documento_1__original.jpg": "d7e3fdf997970e743d6aa5147c2c6e8f20cd37ba7e859ccfb3a06c2d8a7eabba",
+        "data/course_contracts/documento_1__enmienda.jpg": "e82f6ab4b8dbe43bf4875cecc46fbeaac18994a0c5bace3e5a447ea844114271"
+      },
+      "content_review": "passed",
+      "trace_verified": null,
+      "execution_status": "success",
+      "trace_id": "d11f8002b1f850bf505df1f5d012bff1",
+      "final_report_review": "passed",
+      "context_alignment_review": "passed",
+      "visual_transcription_review": "pending"
+    },
+    {
+      "case": "course_2",
+      "input_sha256": {
+        "data/course_contracts/documento_2__original.jpg": "49c5108300258c0740ba5b5491ab6ee9504d117526880ccc319363f5331d6179",
+        "data/course_contracts/documento_2__enmienda.jpg": "af91ad1b163fd3d80a9cb12ce09e2c87bbb3adaefeb95e15ee4f6e72bf489e2d"
+      },
+      "content_review": "passed",
+      "trace_verified": null,
+      "execution_status": "success",
+      "trace_id": "6810059fb2a948794e7e53bfc22afc9d",
+      "final_report_review": "passed",
+      "context_alignment_review": "passed",
+      "visual_transcription_review": "pending"
+    },
+    {
+      "case": "course_3",
+      "input_sha256": {
+        "data/course_contracts/documento_3__original.jpg": "f688107c4d41bf4dbb9bb833afd600834f4b363c8b73a2f4ce9acf693f8b4079",
+        "data/course_contracts/documento_3__enmienda.jpg": "248152b33771f13a7af532ce3a355927daa722581821a2783c82e37204bc9d2f"
+      },
+      "content_review": "passed",
+      "trace_verified": null,
+      "execution_status": "success",
+      "trace_id": "72d72eb3706017f9f916aeb0b2c48edf",
+      "final_report_review": "passed",
+      "context_alignment_review": "passed",
+      "visual_transcription_review": "pending"
+    }
+  ],
+  "review_notes": "All five final reports contain the expected changes. Complex-case contextual alignment failed. Full visual transcription fidelity and remote traces remain unverified."
+}

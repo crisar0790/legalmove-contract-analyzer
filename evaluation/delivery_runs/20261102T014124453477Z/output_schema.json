@@ -1,0 +1,34 @@
+{
+  "additionalProperties": false,
+  "description": "Structured changes supported by the original contract and amendment.",
+  "properties": {
+    "sections_changed": {
+      "description": "Identifiers of substantively modified or added sections, explicitly deleted sections, or original sections conclusively absent from a clearly complete revised version. Omission from a partial or uncertain-scope amendment is not sufficient evidence of deletion. Renumbering alone is not a substantive change.",
+      "items": {
+        "type": "string"
+      },
+      "title": "Sections Changed",
+      "type": "array"
+    },
+    "topics_touched": {
+      "description": "Legal or commercial topics affected by the changes.",
+      "items": {
+        "type": "string"
+      },
+      "title": "Topics Touched",
+      "type": "array"
+    },
+    "summary_of_the_change": {
+      "description": "Evidence-based summary of additions, deletions, and modifications, including relevant previous and new values.",
+      "title": "Summary Of The Change",
+      "type": "string"
+    }
+  },
+  "required": [
+    "sections_changed",
+    "topics_touched",
+    "summary_of_the_change"
+  ],
+  "title": "ContractChangeOutput",
+  "type": "object"
+}

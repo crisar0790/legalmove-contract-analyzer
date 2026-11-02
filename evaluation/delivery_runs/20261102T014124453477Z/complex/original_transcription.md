@@ -1,0 +1,22 @@
+CONTRATO DE LICENCIA DE SOFTWARE
+Caso complejo - Documento original
+
+Entre AR Software y Empresa Demo se acuerda:
+
+Cláusula 1. Objeto
+AR Software concede una licencia de uso de su plataforma de gestión comercial a Empresa Demo.
+
+Cláusula 2. Alcance territorial
+La licencia permite utilizar la plataforma únicamente dentro del territorio de la República Argentina.
+
+Cláusula 3. Precio
+El precio de la licencia es de USD 1200 anuales, con vencimiento el 15 de enero de cada año.
+
+Cláusula 4. Restricción de uso
+Se prohíbe utilizar la plataforma para impartir capacitaciones internas al personal de Empresa Demo.
+
+Cláusula 5. Confidencialidad
+Las partes mantendrán confidenciales las credenciales y la información comercial intercambiada.
+
+Cláusula 6. Vigencia
+La licencia estará vigente desde el 1 de enero de 2026 hasta el 31 de diciembre de 2026.
